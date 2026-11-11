@@ -153,9 +153,10 @@ button { font-family: var(--mono); }
 .compose { padding: 14px; display: flex; flex-direction: column; gap: 12px; --k: var(--neon); transition: border-color .3s; }
 .compose[data-kind="task"] { --k: var(--pulse); }
 .compose[data-kind="note"] { --k: var(--volt); }
+.compose[data-kind="ask"] { --k: var(--warn); }
 .compose:focus-within { border-color: color-mix(in srgb, var(--k) 40%, var(--edge)); }
 
-.seg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; border-radius: 14px; background: var(--tint); border: 1px solid var(--edge); }
+.seg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 4px; border-radius: 14px; background: var(--tint); border: 1px solid var(--edge); }
 .seg button {
   --k: var(--neon);
   font: 500 13px var(--mono); color: var(--mute); background: none; border: 0; border-radius: 10px;
@@ -163,6 +164,7 @@ button { font-family: var(--mono); }
 }
 .seg button[data-kind="task"] { --k: var(--pulse); }
 .seg button[data-kind="note"] { --k: var(--volt); }
+.seg button[data-kind="ask"] { --k: var(--warn); }
 .seg button[aria-checked="true"] {
   color: var(--k); background: color-mix(in srgb, var(--k) 13%, transparent);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--k) 50%, transparent), 0 0 calc(16px * var(--glow)) -6px var(--k);
@@ -192,6 +194,7 @@ button { font-family: var(--mono); }
 .chip.ghost { border-style: dashed; }
 .chip[data-kind="task"] { --k: var(--pulse); }
 .chip[data-kind="note"] { --k: var(--volt); }
+.chip[data-kind="ask"] { --k: var(--warn); }
 .chip[aria-pressed="true"], .chip[aria-checked="true"], .chip[data-on="true"], .chip.on {
   color: var(--k); border-color: color-mix(in srgb, var(--k) 60%, transparent);
   background: color-mix(in srgb, var(--k) 12%, transparent);
@@ -370,6 +373,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
         <button type="button" role="radio" aria-checked="true" data-kind="idea">идея</button>
         <button type="button" role="radio" aria-checked="false" data-kind="task">задача</button>
         <button type="button" role="radio" aria-checked="false" data-kind="note">заметка</button>
+        <button type="button" role="radio" aria-checked="false" data-kind="ask">вопрос</button>
       </div>
       <p class="hint" id="kindHint"></p>
       <div class="line">
@@ -475,6 +479,32 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
           <p class="hint">Кнопки над полем записи. Нажал «купить» — сразу задача «Купить: …» с нужным проектом.</p>
         </div>
       </section>
+
+      <section>
+        <h3>По расписанию</h3>
+        <div class="box">
+          <div class="setrow">
+            <span id="reviewLabel">Разбор идей раз в неделю</span>
+            <button type="button" class="switch" id="reviewOn" role="switch" aria-checked="true" aria-labelledby="reviewLabel"></button>
+          </div>
+          <div class="setrow" id="reviewMore">
+            <span>Когда</span>
+            <span class="addrow"><select class="inp" id="reviewDay" aria-label="День разбора"></select><select class="inp" id="reviewHour" aria-label="Час разбора"></select></span>
+          </div>
+          <div class="stack" id="schedList" style="gap:6px"></div>
+          <div class="stack" id="schedForm" style="gap:8px" hidden>
+            <textarea class="inp" id="schedText" rows="2" placeholder="например: выжимка новостей туризма Кыргызстана" aria-label="Что сделать"></textarea>
+            <div class="chips" id="schedDays" aria-label="Дни недели"></div>
+            <div class="setrow">
+              <span>Во сколько</span>
+              <span class="addrow"><select class="inp" id="schedHour" aria-label="Час"></select><select class="inp" id="schedMin" aria-label="Минуты"></select></span>
+            </div>
+            <button type="button" class="chip on" id="schedAdd" style="align-self:flex-start">добавить</button>
+          </div>
+          <button type="button" class="chip ghost" id="schedOpen" style="align-self:flex-start">+ задача по расписанию</button>
+          <p class="hint">В это время облако положит задачу с ✓ и позовёт Mac. Если Mac спит, сделает, когда проснётся. Время — по городу утренней сводки. Каждый запуск тратит лимиты Claude.</p>
+        </div>
+      </section>
     </div>
   </div>
 </div>
@@ -490,7 +520,8 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   var KIND = {
     idea: { label: 'идея', color: 'var(--neon)', hint: 'Попадёт в папку «Идеи» и на доску идей.' },
     task: { label: 'задача', color: 'var(--pulse)', hint: 'С ✓ Mac выполнит сам по кнопке «▶ за работу». Без ✓ — когда скажешь «синхронизируй» за Mac.' },
-    note: { label: 'заметка', color: 'var(--volt)', hint: 'Сохранится в Jarvis, Claude сам решит, в какую папку.' }
+    note: { label: 'заметка', color: 'var(--volt)', hint: 'Сохранится в Jarvis, Claude сам решит, в какую папку.' },
+    ask: { label: 'вопрос', color: 'var(--warn)', hint: 'Спроси о своих делах. Mac сразу найдёт ответ в Jarvis, он появится во вкладке «готово».' }
   };
   var ARCH_STATUS = { synced: ['забрано', ''], dismissed: ['отменено', ''], done: ['готово', 'done'] };
   var IDEA = { 'new': 'новая', doing: 'в работе', later: 'позже', no: 'не буду' };
@@ -693,7 +724,8 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
 
   function reportItem(it) {
     var d = el('div', 'item glass');
-    d.appendChild(headRow('div', it, 'var(--ok)', when(it.done_at), 'готово', 'done', false));
+    var isAsk = it.kind === 'ask';
+    d.appendChild(headRow('div', it, isAsk ? 'var(--warn)' : 'var(--ok)', when(it.done_at), isAsk ? 'ответ' : 'готово', 'done', false));
     d.appendChild(el('p', 'report', it.report || 'Сделано, подробности в Jarvis.'));
     return d;
   }
@@ -883,6 +915,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     compose.dataset.kind = kind;
     store('mj-kind', kind);
     $('kindHint').textContent = KIND[kind].hint;
+    note.placeholder = kind === 'ask' ? 'что хочешь узнать?' : 'что на уме?';
     renderApprove();
     document.querySelectorAll('.seg [data-kind]').forEach(function (x) {
       x.setAttribute('aria-checked', x.dataset.kind === kind ? 'true' : 'false');
@@ -1019,7 +1052,9 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
       renderComposeChips();
       freshId = j.item && j.item.id;
       haptic('success');
-      toast(j.item && j.item.approved ? 'отправлено ✓ Mac сделает по кнопке «▶ за работу»' : 'отправлено, ждёт');
+      if (j.mac) { data.mac = j.mac; data.run_request = new Date().toISOString(); }
+      if (j.item && j.item.kind === 'ask') toast(j.mac && j.mac.online ? 'спросил Mac, ответ придёт во «готово»' : 'вопрос ждёт: Mac не на связи');
+      else toast(j.item && j.item.approved ? 'отправлено ✓ Mac сделает по кнопке «▶ за работу»' : 'отправлено, ждёт');
       selectTab('wait');
       return refresh();
     }).catch(function (e) {
@@ -1033,6 +1068,8 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   // ---------- настройки: всё сохраняется само ----------
   var draft = null, saveTimer = null, saving = false, dirty = false;
   var addingCity = false, addingProj = false, addingTpl = false, tplKind = 'task';
+  var addingSched = false, schedDays = [1];
+  var DAYS = ['', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'];
   var ALL_TZ = (function () {
     try { if (Intl.supportedValuesOf) return Intl.supportedValuesOf('timeZone'); } catch (e) {}
     return Object.keys(CITY_RU);
@@ -1168,6 +1205,38 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     if (!draft.templates.length) tl.appendChild(el('p', 'hint', 'кнопок пока нет'));
     $('tplForm').hidden = !addingTpl;
     $('tplOpen').textContent = addingTpl ? 'отмена' : '+ кнопка';
+
+    // по расписанию
+    var rv = draft.idea_review;
+    $('reviewOn').setAttribute('aria-checked', rv.on ? 'true' : 'false');
+    $('reviewMore').hidden = !rv.on;
+    $('reviewDay').value = String(rv.day);
+    $('reviewHour').value = String(rv.hour);
+    var sl = $('schedList');
+    sl.textContent = '';
+    draft.schedules.forEach(function (x, i) {
+      var row = el('div', 'tpl-row');
+      var left = el('span', '', x.text.split('\n')[0] + ' ');
+      left.appendChild(el('span', 'k', '· ' + x.days.map(function (d) { return DAYS[d]; }).join(', ') + ' ' + pad(x.hour) + ':' + pad(x.minute)));
+      row.appendChild(left);
+      var del = btn('', '×', function () { draft.schedules.splice(i, 1); changed(); });
+      del.setAttribute('aria-label', 'Удалить задачу по расписанию');
+      row.appendChild(del);
+      sl.appendChild(row);
+    });
+    var sd = $('schedDays');
+    sd.textContent = '';
+    for (var dd = 1; dd <= 7; dd++) (function (d) {
+      var b = btn('chip', DAYS[d], function () {
+        var k = schedDays.indexOf(d);
+        if (k === -1) schedDays.push(d); else schedDays.splice(k, 1);
+        tap(); renderSheet();
+      });
+      b.setAttribute('aria-pressed', schedDays.indexOf(d) !== -1 ? 'true' : 'false');
+      sd.appendChild(b);
+    })(dd);
+    $('schedForm').hidden = !addingSched;
+    $('schedOpen').textContent = addingSched ? 'отмена' : '+ задача по расписанию';
   }
 
   function onBack() { closeSheet(); }
@@ -1176,7 +1245,9 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     draft.cities = draft.cities || [];
     draft.projects = draft.projects || [];
     draft.templates = draft.templates || [];
-    addingCity = addingProj = addingTpl = false;
+    draft.schedules = draft.schedules || [];
+    draft.idea_review = draft.idea_review || { on: true, day: 7, hour: 10 };
+    addingCity = addingProj = addingTpl = addingSched = false;
     $('citySearch').value = ''; $('cityResults').textContent = '';
     setSaveState('сохраняются сами');
     renderSheet();
@@ -1193,9 +1264,35 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   }
 
   (function initHours() {
-    var s = $('digestHour');
-    for (var h = 0; h < 24; h++) s.appendChild(new Option(pad(h) + ':00', String(h)));
+    ['digestHour', 'reviewHour'].forEach(function (id) {
+      for (var h = 0; h < 24; h++) $(id).appendChild(new Option(pad(h) + ':00', String(h)));
+    });
+    for (var h = 0; h < 24; h++) $('schedHour').appendChild(new Option(pad(h), String(h)));
+    [0, 15, 30, 45].forEach(function (m) { $('schedMin').appendChild(new Option(':' + pad(m), String(m))); });
+    for (var d = 1; d <= 7; d++) $('reviewDay').appendChild(new Option(DAYS[d], String(d)));
+    $('schedHour').value = '9';
   })();
+
+  $('reviewOn').addEventListener('click', function () { draft.idea_review.on = !draft.idea_review.on; tap(); changed(); });
+  $('reviewDay').addEventListener('change', function () { draft.idea_review.day = +$('reviewDay').value; changed(); });
+  $('reviewHour').addEventListener('change', function () { draft.idea_review.hour = +$('reviewHour').value; changed(); });
+  $('schedOpen').addEventListener('click', function () {
+    addingSched = !addingSched;
+    renderSheet();
+    if (addingSched) $('schedText').focus();
+  });
+  $('schedAdd').addEventListener('click', function () {
+    var text = $('schedText').value.trim();
+    if (!text) { $('schedText').focus(); toast('напиши, что сделать'); return; }
+    if (!schedDays.length) { toast('выбери хотя бы один день'); return; }
+    draft.schedules.push({
+      id: 's' + Date.now().toString(36), text: text, days: schedDays.slice().sort(),
+      hour: +$('schedHour').value, minute: +$('schedMin').value
+    });
+    $('schedText').value = '';
+    addingSched = false;
+    tap(); changed();
+  });
 
   $('openSettings').addEventListener('click', openSheet);
   $('closeSettings').addEventListener('click', closeSheet);
