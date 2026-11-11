@@ -128,6 +128,7 @@ button { font-family: var(--mono); }
   transition: transform .12s; -webkit-user-select: none; user-select: none; }
 .tile:active { transform: scale(.97); }
 .tile.mac { --k: var(--neon); } .tile.gym { --k: var(--volt); } .tile.hab { --k: var(--ok); } .tile.box { --k: var(--warn); }
+.tile.tasks { --k: var(--pulse); } .tile.work { --k: var(--neon); }
 .tile .tl { font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
 .tile .tbig { font: 600 24px/1.15 var(--mono); font-variant-numeric: tabular-nums; letter-spacing: -.01em; overflow-wrap: anywhere; }
 .tile.mac .tbig { font-size: 18px; }
@@ -147,18 +148,35 @@ button { font-family: var(--mono); }
   padding: 6px max(8px, env(safe-area-inset-left, 0px)) calc(8px + var(--safe-b)) max(8px, env(safe-area-inset-right, 0px));
   background: var(--bar); border-top: 1px solid var(--edge);
   -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%); }
-.tabbar .tb { max-width: 440px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, 1fr); align-items: center; }
+.tabbar .tb { max-width: 480px; margin: 0 auto; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); align-items: center; }
 .tabbar button { position: relative; border: 0; background: none; color: var(--mute); cursor: pointer; padding: 4px 0 2px;
-  display: flex; flex-direction: column; align-items: center; gap: 3px; font: 500 10.5px var(--mono); transition: color .2s; }
-.tabbar button svg { width: 25px; height: 25px; }
+  display: flex; flex-direction: column; align-items: center; gap: 3px; font: 500 10px var(--mono); transition: color .2s; }
+.tabbar button svg { width: 23px; height: 23px; }
 .tabbar button.on { color: var(--neon); text-shadow: 0 0 calc(10px * var(--glow)) var(--neon); }
 .tabbar button.on svg { filter: drop-shadow(0 0 calc(6px * var(--glow)) var(--neon)); }
-.tabbar .plus i { width: 50px; height: 50px; border-radius: 17px; display: grid; place-items: center; font-style: normal;
+.tabbar .plus i { width: 46px; height: 46px; border-radius: 16px; display: grid; place-items: center; font-style: normal;
   background: var(--neon); color: var(--void); box-shadow: 0 0 calc(24px * var(--glow)) -4px var(--neon); transition: transform .12s; }
 .tabbar .plus:active i { transform: scale(.94); }
 .tabbar .badge { position: absolute; top: 0; left: calc(50% + 7px); min-width: 17px; height: 17px; padding: 0 5px; border-radius: 9px;
   background: #FF3B30; color: #fff; font: 700 10.5px/17px var(--mono); }
 .tabbar .bdot { position: absolute; top: 3px; left: calc(50% + 10px); width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+.tabbar .badge.late { background: var(--pulse); box-shadow: 0 0 10px var(--pulse); }
+
+/* Tasks: дела на день */
+.trow { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 4px 0; border-top: 1px dashed var(--edge); }
+.trow .tt { flex: 1; min-width: 0; font-size: 14px; overflow-wrap: anywhere; }
+.trow .tw2 { font-size: 11px; color: var(--mute); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.trow.late .tw2 { color: var(--pulse); }
+.trow.late .chk { border-color: color-mix(in srgb, var(--pulse) 65%, var(--edge)); }
+.trow.done .tt { color: var(--mute); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--ok) 60%, transparent); }
+.trow .x { flex: none; font: 500 15px var(--mono); color: var(--mute); background: none; border: 0; cursor: pointer; min-width: 30px; height: 30px; }
+.tsec { margin: 6px 0 0; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--mute); }
+.tsec.late { color: var(--pulse); }
+.tdopts { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.tdopts .inp { width: auto; padding: 7px 28px 7px 12px; font-size: 12.5px; background-position: right 10px center; }
+.autorow { display: flex; align-items: baseline; gap: 8px; font-size: 13px; padding: 6px 0; border-top: 1px dashed var(--edge); }
+.autorow span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.autorow small { color: var(--mute); font-size: 11px; white-space: nowrap; }
 
 .glass {
   border: 1px solid var(--edge); border-radius: 22px;
@@ -261,6 +279,9 @@ button { font-family: var(--mono); }
 .stepedit .inp { flex: 1; }
 .stepedit button { flex: none; font: 500 13px var(--mono); color: var(--mute); background: var(--tint); border: 1px solid var(--edge); border-radius: 10px; cursor: pointer; height: 38px; min-width: 34px; padding: 0 8px; }
 .stepedit button.on { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 50%, transparent); }
+.stepedit button.on.bot { color: var(--neon); border-color: color-mix(in srgb, var(--neon) 50%, transparent); }
+.srow .botb { flex: none; padding: 5px 10px; font-size: 11.5px; color: var(--neon); border-color: color-mix(in srgb, var(--neon) 50%, transparent); }
+.srow .sbot { font-size: 11px; color: var(--neon); white-space: nowrap; }
 
 /* Поле записи */
 .compose { padding: 14px; display: flex; flex-direction: column; gap: 12px; --k: var(--neon); transition: border-color .3s; }
@@ -482,7 +503,9 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
         <div><div class="tbig" id="macBig">…</div><p class="ts" id="syncLine">loading…</p></div>
         <button type="button" class="run" id="run" hidden>▶ Let’s go</button>
       </div>
+      <div class="tile tasks" id="tileTasks" role="button" tabindex="0"></div>
       <div class="tile gym" id="tileGym" role="button" tabindex="0"></div>
+      <div class="tile work" id="tileWork" role="button" tabindex="0"></div>
       <div class="tile hab" id="tileHab" role="button" tabindex="0"></div>
       <div class="tile box" id="tileBox" role="button" tabindex="0"></div>
     </section>
@@ -503,9 +526,26 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     <section id="p-arch" role="tabpanel" aria-labelledby="t-arch" hidden><div class="list" id="lArch"></div></section>
   </div>
 
+  <div class="stack page" id="pg-tasks" hidden>
+    <section class="glass panel" aria-label="New task">
+      <div class="addrow">
+        <input class="inp" id="tdText" placeholder="what needs doing?" aria-label="New task" enterkeyhint="done" maxlength="200">
+        <button type="button" class="chip on" id="tdAdd">add</button>
+      </div>
+      <div class="tdopts">
+        <button type="button" class="chip" id="tdToday" aria-pressed="true">today</button>
+        <button type="button" class="chip" id="tdTmrw" aria-pressed="false">tmrw</button>
+        <select class="inp" id="tdAt" aria-label="Deadline"></select>
+      </div>
+    </section>
+    <section class="glass panel" id="todoBox" aria-label="Tasks"></section>
+    <p class="hint" id="todoHint" style="padding:0 4px"></p>
+  </div>
+
   <div class="stack page" id="pg-dela" hidden>
     <section class="glass panel runp" id="runPanel" hidden aria-label="Checklist run"></section>
     <section class="stack" id="listsBox" aria-label="Checklists"></section>
+    <section class="glass panel" id="autoBox" hidden aria-label="Mac autopilot"></section>
   </div>
 
   <div class="stack page" id="pg-ideas" hidden>
@@ -526,8 +566,10 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   <div class="tb">
     <button type="button" data-go="today" class="on" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="4.5" width="17" height="16" rx="3"/><path d="M3.5 9.5h17M8 2.8v3.4M16 2.8v3.4"/><circle cx="12" cy="15" r="1.6" fill="currentColor"/></svg><span>Today</span></button>
     <button type="button" data-go="inbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 13.5 6 5.5h12l2.5 8v5a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5z"/><path d="M3.5 13.5H8.5l1.2 2.2h4.6l1.2-2.2h5"/></svg><span>Inbox</span><b class="badge" id="inboxBadge" hidden></b></button>
+    <button type="button" data-go="tasks"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="m8 12.2 2.8 2.8L16.2 9.4"/></svg><span>Tasks</span><b class="badge" id="tasksBadge" hidden></b></button>
     <button type="button" class="plus" id="openCompose" aria-label="New entry"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i></button>
-    <button type="button" data-go="dela"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 6.5 1.6 1.6L8.5 5M4 12.5l1.6 1.6 2.9-3.1M4 18.5l1.6 1.6 2.9-3.1M11.5 7h8.5M11.5 13h8.5M11.5 19h8.5"/></svg><span>Grind</span><b class="bdot" id="runDot" hidden></b></button>
+    <button type="button" data-go="gym"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 12h9M2.5 10v4M21.5 10v4"/><rect x="4.5" y="7" width="3" height="10" rx="1"/><rect x="16.5" y="7" width="3" height="10" rx="1"/></svg><span>Gym</span><b class="bdot" id="runDotGym" hidden></b></button>
+    <button type="button" data-go="work"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7M3 12.5h18M10.5 12.5v1.5h3v-1.5"/></svg><span>Work</span><b class="bdot" id="runDotWork" hidden></b></button>
     <button type="button" data-go="ideas"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.7.6 1.1 1.4 1.1 2.2h5c0-.8.4-1.6 1.1-2.2A6 6 0 0 0 12 3z"/></svg><span>Ideas</span></button>
   </div>
 </nav>
@@ -602,6 +644,25 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
             </div>
             <button type="button" class="chip ghost" id="citySuggest" hidden></button>
           </div>
+        </div>
+      </section>
+
+      <section>
+        <h3>Tasks</h3>
+        <div class="box">
+          <div class="setrow">
+            <span id="nagLabel">Bot pings me till it’s done</span>
+            <button type="button" class="switch" id="nagOn" role="switch" aria-checked="true" aria-labelledby="nagLabel"></button>
+          </div>
+          <div class="setrow"><label for="nagHour">Default deadline</label><select class="inp" id="nagHour"></select></div>
+          <div id="nagMore" class="stack" style="gap:10px">
+            <div class="setrow"><label for="nagEvery">Ping every</label><select class="inp" id="nagEvery"></select></div>
+            <div class="setrow">
+              <span>Quiet hours</span>
+              <span class="addrow"><select class="inp" id="nagQf" aria-label="Quiet from"></select><select class="inp" id="nagQt" aria-label="Quiet till"></select></span>
+            </div>
+          </div>
+          <p class="hint">Task not ticked by its deadline → the bot pings you with a ✅ button, again and again, till you do it. No time set = default deadline. Quiet hours = no pings.</p>
         </div>
       </section>
 
@@ -686,10 +747,17 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
         <input class="inp" id="leTitle" placeholder="e.g. Gym — leg day" aria-label="Checklist name" enterkeyhint="done">
       </section>
       <section>
+        <h3>Section</h3>
+        <div class="chips">
+          <button type="button" class="chip" id="leCatGym" aria-pressed="true">🏋 Gym</button>
+          <button type="button" class="chip" id="leCatWork" aria-pressed="false">💼 Work</button>
+        </div>
+      </section>
+      <section>
         <h3>Steps</h3>
         <div class="stack" id="leSteps" style="gap:8px"></div>
         <button type="button" class="chip ghost" id="leAddStep" style="margin-top:8px">+ step</button>
-        <p class="hint" style="margin-top:8px">“kg” on a step = log weight and reps (gym stuff). Tick steps in any order.</p>
+        <p class="hint" style="margin-top:8px" id="leHint">“kg” on a step = log weight and reps. Tick steps in any order.</p>
       </section>
       <section>
         <h3>Reminder</h3>
@@ -1312,6 +1380,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     call('/settings', { settings: clone(draft) }).then(function (j) {
       settings = j.settings;
       renderComposeChips();
+      if (delaLoaded) renderDela();
       if (!dirty) {
         setSaveState('saved ✓');
         if (!$('sheet').hidden) { draft = clone(settings); renderSheet(); }
@@ -1425,6 +1494,15 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     $('tplForm').hidden = !addingTpl;
     $('tplOpen').textContent = addingTpl ? 'cancel' : '+ button';
 
+    // дела на день
+    var ng = draft.todo_nag;
+    $('nagOn').setAttribute('aria-checked', ng.on ? 'true' : 'false');
+    $('nagMore').hidden = !ng.on;
+    $('nagHour').value = String(ng.hour);
+    $('nagEvery').value = String(ng.every);
+    $('nagQf').value = String(ng.quiet_from);
+    $('nagQt').value = String(ng.quiet_to);
+
     // по расписанию
     $('eveOn').setAttribute('aria-checked', draft.evening.on ? 'true' : 'false');
     $('eveMore').hidden = !draft.evening.on;
@@ -1475,6 +1553,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     draft.idea_review = draft.idea_review || { on: true, day: 7, hour: 10 };
     draft.evening = draft.evening || { on: true, hour: 21 };
     draft.list_review = draft.list_review || { on: true, day: 7, hour: 11 };
+    draft.todo_nag = draft.todo_nag || { on: true, hour: 18, every: 60, quiet_from: 23, quiet_to: 9 };
     addingCity = addingProj = addingTpl = addingSched = false;
     $('citySearch').value = ''; $('cityResults').textContent = '';
     setSaveState('autosaves');
@@ -1492,7 +1571,8 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   }
 
   (function initHours() {
-    ['digestHour', 'reviewHour', 'eveHour', 'lrHour'].forEach(function (id) {
+    [15, 30, 60, 120, 180].forEach(function (m) { $('nagEvery').appendChild(new Option(m < 60 ? m + ' min' : (m / 60) + ' h', String(m))); });
+    ['digestHour', 'reviewHour', 'eveHour', 'lrHour', 'nagHour', 'nagQf', 'nagQt'].forEach(function (id) {
       for (var h = 0; h < 24; h++) $(id).appendChild(new Option(pad(h) + ':00', String(h)));
     });
     ['schedHour', 'leRemHour'].forEach(function (id) {
@@ -1507,6 +1587,11 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     $('schedHour').value = '9';
   })();
 
+  $('nagOn').addEventListener('click', function () { draft.todo_nag.on = !draft.todo_nag.on; tap(); changed(); });
+  $('nagHour').addEventListener('change', function () { draft.todo_nag.hour = +$('nagHour').value; changed(); });
+  $('nagEvery').addEventListener('change', function () { draft.todo_nag.every = +$('nagEvery').value; changed(); });
+  $('nagQf').addEventListener('change', function () { draft.todo_nag.quiet_from = +$('nagQf').value; changed(); });
+  $('nagQt').addEventListener('change', function () { draft.todo_nag.quiet_to = +$('nagQt').value; changed(); });
   $('eveOn').addEventListener('click', function () { draft.evening.on = !draft.evening.on; tap(); changed(); });
   $('eveHour').addEventListener('change', function () { draft.evening.hour = +$('eveHour').value; changed(); });
   $('lrOn').addEventListener('click', function () { draft.list_review.on = !draft.list_review.on; tap(); changed(); });
@@ -1587,7 +1672,8 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   $('tplLabel').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); addTemplate(); } });
 
   // ---------- дела: привычки и чек-листы ----------
-  var dela = { lists: [], runs: [], habits: [], marks: [] }, delaLoaded = false;
+  var dela = { lists: [], runs: [], habits: [], marks: [], todos: [] }, delaLoaded = false;
+  var todoDay = 'today', todoEdit = false;
   var view = 'inbox', run = null, runSaveTimer = null, tickTimer = null;
   var habitEdit = false, addingHabit = false, openStats = {};
   var edit = null;
@@ -1605,11 +1691,14 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   function daysLabel(r) { return r.days.map(function (d) { return DAYS[d]; }).join(', ') + ' ' + pad(r.hour) + ':' + pad(r.minute); }
 
   // ---------- экраны и меню снизу ----------
-  var PAGES = { today: 'Today', inbox: 'Inbox', dela: 'Grind', ideas: 'Ideas' };
+  var PAGES = { today: 'Today', inbox: 'Inbox', tasks: 'Tasks', gym: 'Gym', work: 'Work', ideas: 'Ideas' };
+  var PAGE_EL = { gym: 'dela', work: 'dela' };
+  var DELA_VIEWS = ['today', 'tasks', 'gym', 'work'];
   var WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
   var MONTHS_FULL = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   function selectView(v) {
+    if (v === 'dela') v = 'gym';
     view = PAGES[v] ? v : 'today';
     store('mj-view', view);
     document.querySelectorAll('#tabbar [data-go]').forEach(function (b) {
@@ -1617,10 +1706,12 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
       b.classList.toggle('on', on);
       if (on) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
     });
-    Object.keys(PAGES).forEach(function (k) { $('pg-' + k).hidden = k !== view; });
+    var pg = 'pg-' + (PAGE_EL[view] || view);
+    document.querySelectorAll('.page').forEach(function (x) { x.hidden = x.id !== pg; });
+    if (view === 'gym' || view === 'work') { renderRun(); renderLists(); renderAuto(); }
     renderPageHead();
     window.scrollTo(0, 0);
-    if (view === 'dela' || view === 'today') loadDela();
+    if (DELA_VIEWS.indexOf(view) !== -1) loadDela();
   }
 
   function renderPageHead() {
@@ -1628,7 +1719,13 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     var sub = '';
     if (view === 'today') { var d = new Date(); sub = WEEKDAYS[d.getDay()] + ', ' + MONTHS_FULL[d.getMonth()] + ' ' + d.getDate(); }
     else if (view === 'inbox') sub = data.waiting.length ? data.waiting.length + ' pending' : 'all clear';
-    else if (view === 'dela') sub = run ? 'checklist in progress' : (dela.lists.length ? dela.lists.length + ' checklist' + (dela.lists.length === 1 ? '' : 's') : '');
+    else if (view === 'tasks') {
+      var ts = todoStats();
+      sub = ts.total ? ts.done + '/' + ts.total + ' done' + (ts.late ? ' · ' + ts.late + ' late' : '') : ts.before ? ts.before + ' left from before' : 'plan your day';
+    } else if (view === 'gym' || view === 'work') {
+      var ls = listsOf(view);
+      sub = runCat() === view ? 'checklist in progress' : (ls.length ? ls.length + ' checklist' + (ls.length === 1 ? '' : 's') : '');
+    }
     else if (view === 'ideas') {
       var doing = data.ideas.filter(function (i) { return i.idea_status === 'doing'; }).length;
       sub = data.ideas.length ? data.ideas.length + ' idea' + (data.ideas.length === 1 ? '' : 's') + (doing ? ' · ' + doing + ' on it' : '') : '';
@@ -1637,6 +1734,10 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     var n = data.waiting.length;
     $('inboxBadge').hidden = !n;
     $('inboxBadge').textContent = n > 99 ? '99+' : String(n);
+    var st = todoStats(), open = st.total - st.done + st.before;
+    $('tasksBadge').hidden = !open;
+    $('tasksBadge').textContent = open > 99 ? '99+' : String(open);
+    $('tasksBadge').classList.toggle('late', !!st.late);
   }
 
   // «Сегодня»: сроки задач и чек-листы, которые запланированы на сегодня
@@ -1673,19 +1774,199 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
 
   function loadDela() {
     return call('/dela').then(function (j) {
-      dela = { lists: j.lists || [], runs: j.runs || [], habits: j.habits || [], marks: j.marks || [] };
+      dela = { lists: j.lists || [], runs: j.runs || [], habits: j.habits || [], marks: j.marks || [], todos: j.todos || [] };
       delaLoaded = true;
       var act = dela.runs.filter(function (r) { return r.status === 'active'; })[0] || null;
       // своё незаконченное прохождение не затираем ответом облака
       if (act && !(run && run.id === act.id)) run = act;
       if (!act && run && !runSaveTimer) run = null;
       renderDela();
-    }).catch(function (e) { toast('grind didn’t load: ' + e.message, true); });
+    }).catch(function (e) { toast('couldn’t load: ' + e.message, true); });
   }
 
   function renderDela() {
-    $('runDot').hidden = !run;
-    renderRun(); renderHabits(); renderLists(); renderToday(); renderPageHead();
+    setRunDots();
+    renderRun(); renderHabits(); renderLists(); renderAuto(); renderTodos(); renderToday(); renderPageHead();
+  }
+  function catOf(l) { return l && l.cat === 'work' ? 'work' : 'gym'; }
+  function runCat() { return run ? catOf(listById(run.list_id)) : null; }
+  function listsOf(cat) { return dela.lists.filter(function (l) { return catOf(l) === cat; }); }
+  function setRunDots() { var c = runCat(); $('runDotGym').hidden = c !== 'gym'; $('runDotWork').hidden = c !== 'work'; }
+
+  // ---------- Tasks: дела на день ----------
+  function nag() { return settings.todo_nag || { on: true, hour: 18, every: 60, quiet_from: 23, quiet_to: 9 }; }
+  function defAt() { return pad(nag().hour) + ':00'; }
+  function todoDeadline(t) {
+    var d = t.day.split('-'), a = (t.at || defAt()).split(':');
+    return new Date(+d[0], +d[1] - 1, +d[2], +a[0], +a[1]).getTime();
+  }
+  function todoStats() {
+    var today = localDay(), now = Date.now(), o = { total: 0, done: 0, late: 0, before: 0, next: null };
+    dela.todos.forEach(function (t) {
+      if (t.day === today) { o.total++; if (t.done_at) o.done++; }
+      if (t.done_at || t.day > today) return;
+      if (t.day < today) o.before++;
+      if (todoDeadline(t) <= now) o.late++;
+      else if (!o.next || todoDeadline(t) < todoDeadline(o.next)) o.next = t;
+    });
+    return o;
+  }
+  function shortDay(day) { var d = day.split('-'); return WEEKDAYS[new Date(+d[0], +d[1] - 1, +d[2]).getDay()].slice(0, 3); }
+  function everyLabel(m) { return m < 60 ? m + ' min' : m === 60 ? 'hour' : (m / 60) + ' h'; }
+  function renderTodoAll() { renderTodos(); renderTiles(); renderPageHead(); }
+
+  function todoRow(t) {
+    var today = localDay(), late = !t.done_at && t.day <= today && todoDeadline(t) <= Date.now();
+    var r = el('div', 'trow' + (t.done_at ? ' done' : '') + (late ? ' late' : ''));
+    var c = btn('chk' + (t.done_at ? ' on' : ''), '✓', function () { toggleTodo(t); });
+    c.setAttribute('aria-pressed', t.done_at ? 'true' : 'false');
+    c.setAttribute('aria-label', t.text + (t.done_at ? ': done' : ': not yet'));
+    r.appendChild(c);
+    r.appendChild(el('span', 'tt', t.text));
+    var w, at = t.at || defAt(), pings = t.nags ? ' · 🔔' + t.nags : '';
+    if (t.done_at) { var d = new Date(t.done_at); w = '✓ ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+    else if (t.day < today) w = 'since ' + shortDay(t.day) + pings;
+    else if (t.day > today) w = (t.day === dayShift(today, 1) ? 'tmrw ' : shortDay(t.day) + ' ') + at;
+    else w = (late ? 'late · ' : 'by ') + at + pings;
+    r.appendChild(el('span', 'tw2', w));
+    if (todoEdit) {
+      if (!t.done_at) {
+        var fwd = t.day <= today;
+        var mv = btn('x', fwd ? '→' : '←', function () { moveTodo(t, fwd ? dayShift(today, 1) : today); });
+        mv.setAttribute('aria-label', fwd ? 'Move to tomorrow' : 'Move to today');
+        r.appendChild(mv);
+      }
+      var del = btn('x', '×'), armed = false;
+      del.setAttribute('aria-label', 'Delete task ' + t.text);
+      del.addEventListener('click', function () {
+        if (!armed) { armed = true; del.textContent = '?'; toast('tap again to delete'); setTimeout(function () { armed = false; del.textContent = '×'; }, 3000); return; }
+        dela.todos = dela.todos.filter(function (x) { return x !== t; });
+        tap(); renderTodoAll();
+        call('/todo/delete', { id: t.id }).catch(function (e) { toast(e.message, true); loadDela(); });
+      });
+      r.appendChild(del);
+    }
+    return r;
+  }
+
+  function renderTodos() {
+    var box = $('todoBox');
+    box.textContent = '';
+    var today = localDay(), st = todoStats();
+    var h = el('div', 'panel-h');
+    h.appendChild(el('h2', '', 'Today · ' + st.done + '/' + st.total));
+    if (dela.todos.some(function (t) { return t.day >= today || !t.done_at; })) {
+      h.appendChild(btn('mini', todoEdit ? 'done' : 'edit', function () { todoEdit = !todoEdit; renderTodos(); }));
+    }
+    box.appendChild(h);
+    var before = [], open = [], done = [], later = [];
+    dela.todos.forEach(function (t) {
+      if (t.day < today) { if (!t.done_at) before.push(t); }
+      else if (t.day === today) (t.done_at ? done : open).push(t);
+      else later.push(t);
+    });
+    var byDl = function (a, b) { return todoDeadline(a) - todoDeadline(b); };
+    before.sort(byDl); open.sort(byDl); later.sort(byDl);
+    done.sort(function (a, b) { return new Date(a.done_at) - new Date(b.done_at); });
+    if (before.length) {
+      box.appendChild(el('p', 'tsec late', 'left from before'));
+      before.forEach(function (t) { box.appendChild(todoRow(t)); });
+      if (open.length || done.length) box.appendChild(el('p', 'tsec', 'today'));
+    }
+    open.concat(done).forEach(function (t) { box.appendChild(todoRow(t)); });
+    if (!st.total && !before.length) {
+      box.appendChild(el('p', 'hint', delaLoaded
+        ? 'Nothing planned. Drop what you gotta get done today — miss the deadline and the bot keeps pinging till you tick it.'
+        : 'loading…'));
+    } else if (st.total && st.done === st.total && !before.length) {
+      box.appendChild(el('p', 'hint', 'All done today. Beast mode 💪'));
+    }
+    if (later.length) {
+      box.appendChild(el('p', 'tsec', 'tomorrow & later'));
+      later.forEach(function (t) { box.appendChild(todoRow(t)); });
+    }
+    var n = nag();
+    $('tdAt').options[0].textContent = 'by ' + defAt();
+    $('todoHint').textContent = n.on === false
+      ? 'Pings are off — turn them on in ⚙ → Tasks.'
+      : 'Not ticked by the deadline → bot pings you every ' + everyLabel(n.every) + ' with a ✅ button' +
+        (n.quiet_from !== n.quiet_to ? ' (quiet ' + pad(n.quiet_from) + '–' + pad(n.quiet_to) + ')' : '') + '. Tweak it in ⚙.';
+    $('tdToday').setAttribute('aria-pressed', todoDay === 'today' ? 'true' : 'false');
+    $('tdTmrw').setAttribute('aria-pressed', todoDay === 'tmrw' ? 'true' : 'false');
+  }
+
+  function toggleTodo(t) {
+    var done = !t.done_at;
+    t.done_at = done ? new Date().toISOString() : null;
+    if (done) haptic('success'); else tap();
+    var st = todoStats();
+    if (done && t.day === localDay() && st.done === st.total && !st.before) toast('all tasks done today 💪 beast mode');
+    renderTodoAll();
+    call('/todo/done', { id: t.id, done: done }).then(function (j) { Object.assign(t, j.todo); renderTodoAll(); })
+      .catch(function (e) { toast(e.message, true); loadDela(); });
+  }
+  function moveTodo(t, day) {
+    t.day = day; t.nags = 0;
+    tap(); renderTodoAll();
+    call('/todo/save', { id: t.id, text: t.text, day: day, at: t.at }).then(function (j) { Object.assign(t, j.todo); renderTodoAll(); })
+      .catch(function (e) { toast(e.message, true); loadDela(); });
+  }
+  function addTodo() {
+    var text = $('tdText').value.trim();
+    if (!text) { $('tdText').focus(); return; }
+    var day = todoDay === 'tmrw' ? dayShift(localDay(), 1) : localDay(), at = $('tdAt').value || null;
+    $('tdAdd').disabled = true;
+    call('/todo/save', { text: text, day: day, at: at }).then(function (j) {
+      dela.todos.push(j.todo);
+      $('tdText').value = '';
+      haptic('success');
+      if (todoDay === 'today' && todoDeadline(j.todo) <= Date.now()) toast('that time’s already gone — bot pings you right away');
+      renderTodoAll();
+    }).catch(function (e) { toast(e.message, true); })
+      .then(function () { $('tdAdd').disabled = false; });
+  }
+  (function initTodo() {
+    var s = $('tdAt');
+    s.appendChild(new Option('by 18:00', ''));
+    for (var m = 6 * 60; m < 24 * 60; m += 30) s.appendChild(new Option('by ' + pad(Math.floor(m / 60)) + ':' + pad(m % 60), pad(Math.floor(m / 60)) + ':' + pad(m % 60)));
+    $('tdAdd').addEventListener('click', addTodo);
+    $('tdText').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); addTodo(); } });
+    $('tdToday').addEventListener('click', function () { todoDay = 'today'; tap(); renderTodos(); });
+    $('tdTmrw').addEventListener('click', function () { todoDay = 'tmrw'; tap(); renderTodos(); });
+  })();
+
+  // ---------- Work: автопилот Mac ----------
+  function renderAuto() {
+    var box = $('autoBox');
+    box.hidden = view !== 'work';
+    if (box.hidden) return;
+    box.textContent = '';
+    var h = el('div', 'panel-h');
+    h.appendChild(el('h2', '', '🤖 Mac autopilot'));
+    h.appendChild(btn('mini', '+ task', function () {
+      openSheet(); addingSched = true; renderSheet();
+      setTimeout(function () { $('schedForm').scrollIntoView({ block: 'center', behavior: 'smooth' }); $('schedText').focus(); }, 80);
+    }));
+    box.appendChild(h);
+    var sc = settings.schedules || [];
+    sc.forEach(function (x) {
+      var r = el('div', 'autorow');
+      r.appendChild(el('span', '', x.text.split('\n')[0]));
+      r.appendChild(el('small', '', x.days.map(function (d) { return DAYS[d]; }).join(', ') + ' ' + pad(x.hour) + ':' + pad(x.minute)));
+      box.appendChild(r);
+    });
+    box.appendChild(el('p', 'hint', sc.length
+      ? 'The Mac runs these on schedule by itself. Mark a checklist step 🤖 — one tap hands it to the Mac.'
+      : 'Routine stuff the Mac does on schedule: reports, news digests, file cleanup. Or mark a checklist step 🤖 — one tap hands it to the Mac.'));
+  }
+  function delegateStep(s, l, b) {
+    b.disabled = true;
+    call('/delegate', { text: (l ? l.title + ': ' : '') + s.text }).then(function (j) {
+      s.done_at = new Date().toISOString();
+      haptic('success');
+      toast(j.mac && j.mac.online ? 'handed to the Mac 🤖 — report lands in Inbox → done' : 'queued for the Mac 🤖 — starts once it’s online');
+      renderRun(); saveRun(); refresh(true);
+    }).catch(function (e) { b.disabled = false; toast(e.message, true); });
   }
 
   // --- привычки ---
@@ -1873,18 +2154,20 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   function renderLists() {
     var box = $('listsBox');
     box.textContent = '';
+    if (view !== 'gym' && view !== 'work') return;
+    var cat = view, lists = listsOf(cat);
     var head = el('div', 'glass panel');
     var h = el('div', 'panel-h');
-    h.appendChild(el('h2', '', 'Checklists'));
-    h.appendChild(btn('mini', '+ checklist', function () { openListEditor(null); }));
+    h.appendChild(el('h2', '', cat === 'gym' ? 'Workouts' : 'Work checklists'));
+    h.appendChild(btn('mini', '+ checklist', function () { openListEditor(null, cat); }));
     head.appendChild(h);
-    if (!dela.lists.length) {
-      head.appendChild(el('p', 'hint', delaLoaded
-        ? 'Step lists for work, the gym, whatever. Hit “start”, tick steps — time, best order and your gains get tracked automatically.'
-        : 'loading…'));
+    if (!lists.length) {
+      head.appendChild(el('p', 'hint', !delaLoaded ? 'loading…' : cat === 'gym'
+        ? 'Build a workout: exercises as steps, tap “kg” to log weight × reps. Hit start, tick sets — time, PRs and best order track themselves.'
+        : 'Your work routine as steps: inbox zero, calls, reports. Tick them in any order — time and best order get tracked. Mark a step 🤖 and the Mac does it for you.'));
     }
     box.appendChild(head);
-    dela.lists.forEach(function (l) {
+    lists.forEach(function (l) {
       var rs = doneRuns(l.id);
       var c = el('div', 'lcard glass');
       c.appendChild(el('p', 'lt', l.title));
@@ -1971,38 +2254,53 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     t.appendChild(b);
     return b;
   }
-  function nextList() {
-    var wd = new Date().getDay() || 7, now = new Date();
-    var today = dela.lists.filter(function (l) { return l.remind && l.remind.days.indexOf(wd) !== -1; })
+  function nextList(cat) {
+    var wd = new Date().getDay() || 7, mine = listsOf(cat);
+    var today = mine.filter(function (l) { return l.remind && l.remind.days.indexOf(wd) !== -1; })
       .sort(function (a, b) { return (a.remind.hour * 60 + a.remind.minute) - (b.remind.hour * 60 + b.remind.minute); });
     if (today.length) return { list: today[0], when: 'today ' + pad(today[0].remind.hour) + ':' + pad(today[0].remind.minute) };
-    var recent = dela.runs.filter(function (r) { return r.status === 'done'; })[0];
-    var l = recent ? listById(recent.list_id) : dela.lists[0];
+    var recent = dela.runs.filter(function (r) { var x = listById(r.list_id); return r.status === 'done' && x && catOf(x) === cat; })[0];
+    var l = recent ? listById(recent.list_id) : mine[0];
     return l ? { list: l, when: '' } : null;
   }
-  function renderTiles() {
-    // чек-лист
-    var g = $('tileGym');
-    if (run) {
+  function listTile(g, cat) {
+    if (run && runCat() === cat) {
       var l = listById(run.list_id), done = run.steps.filter(function (s) { return s.done_at; }).length;
       var tv = el('div', 'tbig', dur(Date.now() - new Date(run.started_at).getTime()));
       tv.id = 'tileRunTimer';
-      tileText(g, 'running', tv, (l ? l.title : 'checklist') + ' · ' + done + '/' + run.steps.length);
-      g.appendChild(btn('mini go', 'open', function (e) { e.stopPropagation(); selectView('dela'); }));
-      g.setAttribute('aria-label', 'Checklist running, open it');
-    } else {
-      var nx = nextList();
-      if (nx) {
-        var rs = doneRuns(nx.list.id);
-        var best = rs.length ? dur(Math.min.apply(null, rs.map(runTotal))) : '—';
-        tileText(g, 'checklist', best, nx.list.title + (nx.when ? ' · ' + nx.when : rs.length ? ' · best' : ''));
-        g.appendChild(btn('mini go', '▶ start', function (e) { e.stopPropagation(); startList(nx.list); }));
-        g.setAttribute('aria-label', 'Checklist ' + nx.list.title);
-      } else {
-        tileText(g, 'checklists', '+', delaLoaded ? 'make your first: gym, work, morning' : 'loading…');
-        g.setAttribute('aria-label', 'Create a checklist');
-      }
+      tileText(g, cat + ' · running', tv, (l ? l.title : 'checklist') + ' · ' + done + '/' + run.steps.length);
+      g.appendChild(btn('mini go', 'open', function (e) { e.stopPropagation(); selectView(cat); }));
+      g.setAttribute('aria-label', cat + ' checklist running, open it');
+      return;
     }
+    var nx = nextList(cat);
+    if (nx) {
+      var rs = doneRuns(nx.list.id);
+      var best = rs.length ? dur(Math.min.apply(null, rs.map(runTotal))) : '—';
+      tileText(g, cat, best, nx.list.title + (nx.when ? ' · ' + nx.when : rs.length ? ' · best' : ''));
+      if (!run) g.appendChild(btn('mini go', '▶ start', function (e) { e.stopPropagation(); startList(nx.list); }));
+      g.setAttribute('aria-label', cat + ': ' + nx.list.title);
+    } else {
+      tileText(g, cat, '+', !delaLoaded ? 'loading…' : cat === 'gym' ? 'build your first workout' : 'build your work routine');
+      g.setAttribute('aria-label', 'Create a ' + cat + ' checklist');
+    }
+  }
+  function renderTiles() {
+    // дела на день
+    var tt = $('tileTasks'), st = todoStats();
+    if (st.total) {
+      var rr = el('div');
+      rr.innerHTML = ring(st.done, st.total);
+      tileText(tt, 'tasks', rr.firstChild,
+        st.late ? st.late + ' late — bot’s on you' : st.next ? 'next: ' + st.next.text + ' · ' + (st.next.at || defAt()) : 'all done ✓', !!st.late);
+    } else if (st.before) {
+      tileText(tt, 'tasks', String(st.before), 'left from before — finish ’em', true);
+    } else {
+      tileText(tt, 'tasks', '+', delaLoaded ? 'plan your day' : 'loading…');
+    }
+    // чек-листы
+    listTile($('tileGym'), 'gym');
+    listTile($('tileWork'), 'work');
     // привычки
     var h = $('tileHab'), today = localDay();
     if (dela.habits.length) {
@@ -2030,15 +2328,16 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   function startList(l) {
     return call('/run/start', { list_id: l.id }).then(function (j) {
       run = j.run; haptic('success');
-      selectView('dela'); renderDela();
+      selectView(catOf(l)); renderDela();
     }).catch(function (e) { toast(e.message, true); });
   }
 
   function renderRun() {
     var p = $('runPanel');
-    $('runDot').hidden = !run;
+    setRunDots();
     renderRunMini();
     if (!run) { p.hidden = true; stopTick(); return; }
+    if (runCat() !== view) { p.hidden = true; startTick(); return; }
     p.hidden = false;
     p.textContent = '';
     var l = listById(run.list_id);
@@ -2064,6 +2363,11 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
       sr.appendChild(c);
       sr.appendChild(el('span', 'stx', s.text));
       if (s.done_at) sr.appendChild(el('span', 'sd', '+' + dur(durs[s.id] || 0)));
+      else if (s.auto) {
+        var bb = btn('mini botb', '🤖 Mac', function (e) { e.stopPropagation(); delegateStep(s, l, bb); });
+        bb.setAttribute('aria-label', 'Hand “' + s.text + '” to the Mac');
+        sr.appendChild(bb);
+      }
       var wIn, rIn;
       var toggle = function () {
         s.done_at = s.done_at ? null : new Date().toISOString();
@@ -2118,10 +2422,10 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
 
   // --- редактор чек-листа ---
   function onListBack() { closeListEditor(); }
-  function openListEditor(l) {
+  function openListEditor(l, cat) {
     edit = l
-      ? { id: l.id, title: l.title, steps: clone(l.steps), remind: l.remind ? clone(l.remind) : null }
-      : { title: '', steps: [{ id: newId(), text: '', track: false }], remind: null };
+      ? { id: l.id, cat: catOf(l), title: l.title, steps: clone(l.steps), remind: l.remind ? clone(l.remind) : null }
+      : { cat: cat || (view === 'work' ? 'work' : 'gym'), title: '', steps: [{ id: newId(), text: '', track: false }], remind: null };
     $('leTitle').value = edit.title;
     renderEditor();
     $('listSheet').hidden = false;
@@ -2136,8 +2440,14 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     edit = null;
   }
   function renderEditor() {
-    var box = $('leSteps');
+    var box = $('leSteps'), work = edit.cat === 'work';
     box.textContent = '';
+    $('leCatGym').setAttribute('aria-pressed', work ? 'false' : 'true');
+    $('leCatWork').setAttribute('aria-pressed', work ? 'true' : 'false');
+    $('leTitle').placeholder = work ? 'e.g. Morning at work' : 'e.g. Leg day';
+    $('leHint').textContent = work
+      ? '“🤖” on a step = one tap hands it to the Mac. Tick steps in any order.'
+      : '“kg” on a step = log weight and reps. Tick steps in any order.';
     edit.steps.forEach(function (s, i) {
       var r = el('div', 'stepedit');
       var inp = el('input', 'inp');
@@ -2147,9 +2457,10 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
         if (e.key === 'Enter') { e.preventDefault(); if (i === edit.steps.length - 1) addStep(); else box.querySelectorAll('input')[i + 1].focus(); }
       });
       r.appendChild(inp);
-      var kg = btn(s.track ? 'on' : '', 'kg', function () { s.track = !s.track; tap(); renderEditor(); });
-      kg.setAttribute('aria-pressed', s.track ? 'true' : 'false');
-      kg.setAttribute('aria-label', 'Log weight and reps');
+      var flag = work ? 'auto' : 'track';
+      var kg = btn((s[flag] ? 'on' : '') + (work ? ' bot' : ''), work ? '🤖' : 'kg', function () { s[flag] = !s[flag]; tap(); renderEditor(); });
+      kg.setAttribute('aria-pressed', s[flag] ? 'true' : 'false');
+      kg.setAttribute('aria-label', work ? 'The Mac can do this step' : 'Log weight and reps');
       r.appendChild(kg);
       if (i > 0) {
         var up = btn('', '↑', function () { edit.steps.splice(i - 1, 0, edit.steps.splice(i, 1)[0]); tap(); renderEditor(); });
@@ -2195,7 +2506,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     if (!edit.title) { $('leTitle').focus(); toast('give it a name'); return; }
     if (!steps.length) { toast('add at least one step'); return; }
     if (edit.remind && !edit.remind.days.length) edit.remind = null;
-    var body = { id: edit.id, title: edit.title, steps: steps, remind: edit.remind };
+    var body = { id: edit.id, cat: edit.cat, title: edit.title, steps: steps, remind: edit.remind };
     $('listSave').disabled = true;
     call('/list/save', { list: body }).then(function () {
       haptic('success'); toast('checklist saved');
@@ -2206,6 +2517,8 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   $('listSave').addEventListener('click', closeListEditor);
   $('listSheet').addEventListener('click', function (e) { if (e.target === $('listSheet')) closeListEditor(); });
   $('leAddStep').addEventListener('click', addStep);
+  $('leCatGym').addEventListener('click', function () { edit.title = $('leTitle').value; edit.cat = 'gym'; tap(); renderEditor(); });
+  $('leCatWork').addEventListener('click', function () { edit.title = $('leTitle').value; edit.cat = 'work'; tap(); renderEditor(); });
   $('leRemOn').addEventListener('click', function () {
     edit.remind = edit.remind ? null : { days: [1, 3, 5], hour: 19, minute: 0 };
     tap(); renderEditor();
@@ -2231,9 +2544,17 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
       else if (macOnline()) toast('Mac’s online. Hit “▶ Let’s go” — it sorts your inbox and knocks out ✓ tasks');
       else toast('Mac’s offline. Needs: Mac awake, Jarvis open, Passwords unlocked since boot', true);
     },
+    tileTasks: function () {
+      selectView('tasks');
+      if (!todoStats().total && delaLoaded) setTimeout(function () { $('tdText').focus(); }, 50);
+    },
     tileGym: function () {
-      selectView('dela');
-      if (!run && !dela.lists.length && delaLoaded) openListEditor(null);
+      selectView('gym');
+      if (!listsOf('gym').length && delaLoaded) openListEditor(null, 'gym');
+    },
+    tileWork: function () {
+      selectView('work');
+      if (!listsOf('work').length && delaLoaded) openListEditor(null, 'work');
     },
     tileHab: function () {
       if (!dela.habits.length) { addingHabit = true; renderHabits(); }
@@ -2296,7 +2617,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); send(); }
   });
   $('send').addEventListener('click', send);
-  $('refresh').addEventListener('click', function () { refresh(); if (view === 'dela') loadDela(); });
+  $('refresh').addEventListener('click', function () { refresh(); if (DELA_VIEWS.indexOf(view) !== -1 && view !== 'today') loadDela(); });
   $('run').addEventListener('click', runMac);
   $('approveNew').addEventListener('click', function () {
     approveNew = !approveNew;
@@ -2323,7 +2644,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   render();
   refresh();
   selectView(load('mj-view') || 'today');
-  if (view !== 'dela' && view !== 'today') loadDela(); // привычки и точка «идёт чек-лист» нужны везде
+  if (DELA_VIEWS.indexOf(view) === -1) loadDela(); // дела, привычки и точка «идёт чек-лист» нужны везде
 })();
 </script>
 </body>
