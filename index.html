@@ -469,6 +469,55 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
 :focus-visible { outline: 2px solid var(--neon); outline-offset: 2px; }
 #note:focus-visible, .tool input:focus-visible { outline: 0; }
 .tool:focus-within { outline: 2px solid var(--neon); outline-offset: 2px; }
+/* XP и серия дней */
+.xpbar { gap: 8px; cursor: pointer; }
+.xpbar .xr { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.xpbar .lv { font: 600 15px var(--mono); }
+.xpbar .lv small { font: 400 12px var(--mono); color: var(--ink-2); margin-left: 6px; }
+.xpbar .sk { font: 600 14px var(--mono); color: var(--warn); white-space: nowrap; }
+.xpbar .sk.dim { color: var(--mute); font-weight: 400; }
+.xpbar .bar { height: 6px; border-radius: 999px; background: var(--tint-hi); overflow: hidden; }
+.xpbar .bar i { display: block; height: 100%; border-radius: 999px; background: var(--volt); box-shadow: 0 0 calc(10px * var(--glow)) var(--volt); }
+.xpbar .xs { font-size: 11px; color: var(--mute); font-variant-numeric: tabular-nums; }
+.xpbar .how { font-size: 11.5px; line-height: 1.5; color: var(--ink-2); border-top: 1px dashed var(--edge); padding-top: 8px; }
+/* закреплённое */
+.pinrow { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 4px 0; border-top: 1px dashed var(--edge); font-size: 13.5px; cursor: pointer; }
+.pinrow:first-of-type { border-top: 0; }
+.pinrow .pt { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.pinrow .pw { font-size: 11px; color: var(--mute); white-space: nowrap; }
+.pinrow .x { flex: none; font: 500 15px var(--mono); color: var(--mute); background: none; border: 0; cursor: pointer; min-width: 30px; height: 30px; }
+.pinrow .chk { flex: none; }
+/* правка на карточке */
+.acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; white-space: normal; }
+.acts .del { margin-top: 0; }
+.item.tap { cursor: pointer; }
+.pinmark { color: var(--warn); }
+/* фото */
+.photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(76px, 1fr)); gap: 8px; }
+.photo { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; border: 1px solid var(--edge); background: var(--tint); }
+.photo img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in; }
+.photo button { position: absolute; top: 4px; right: 4px; width: 26px; height: 26px; border-radius: 50%; border: 0; background: rgba(0,0,0,.6); color: #fff; font: 500 14px var(--mono); cursor: pointer; }
+.photo.add { display: grid; place-items: center; font: 400 26px var(--mono); color: var(--mute); border-style: dashed; cursor: pointer; }
+.photo.add input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.photo.busy { display: grid; place-items: center; font-size: 11px; color: var(--mute); }
+.strip { display: flex; gap: 6px; margin-top: 10px; overflow-x: auto; }
+.strip img { width: 64px; height: 64px; object-fit: cover; border-radius: 10px; border: 1px solid var(--edge); flex: none; cursor: zoom-in; }
+.viewer { position: fixed; inset: 0; z-index: 40; background: rgba(0,0,0,.92); display: grid; place-items: center; padding: 16px; cursor: zoom-out; }
+.viewer img { max-width: 100%; max-height: 100%; border-radius: 12px; }
+.trow .tt { cursor: pointer; }
+.trow .ic { font-size: 11px; margin-right: 4px; }
+.daychips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.daychips input[type="date"] { width: auto; }
+/* Gym: прогресс */
+.prog { display: flex; flex-direction: column; gap: 4px; padding: 10px 0 4px; border-top: 1px dashed var(--edge); }
+.panel-h + .prog { border-top: 0; }
+.prog .ph { display: flex; justify-content: space-between; gap: 10px; font-size: 13.5px; }
+.prog .ph b { font: 600 13px var(--mono); color: var(--ink); white-space: nowrap; }
+.prog .pm { font-size: 11px; color: var(--mute); font-variant-numeric: tabular-nums; }
+.prog .pm .up { color: var(--ok); }
+.prog svg { width: 100%; height: auto; display: block; overflow: visible; }
+.prog svg text { font: 500 9.5px var(--mono); fill: var(--ink-2); }
+.prog .tip { font-size: 11px; color: var(--ink-2); min-height: 15px; font-variant-numeric: tabular-nums; }
 @media (prefers-reduced-motion: reduce) {
   .orb, .led, .item.fresh, .nudge, .icon-btn.spin span, .sheet-panel { animation: none; }
   .toast, .send, .chip, .switch, .switch::after { transition: none; }
@@ -498,6 +547,8 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   </section>
 
   <div class="stack page" id="pg-today">
+    <section class="glass panel xpbar" id="xpBox" role="button" tabindex="0" aria-label="Level and streak"></section>
+    <section class="glass panel" id="pinBox" hidden aria-label="Pinned"></section>
     <section class="tiles" aria-label="At a glance">
       <div class="tile mac" id="tileMac" role="button" tabindex="0" aria-label="Mac">
         <span class="tl">Mac</span>
@@ -547,6 +598,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     <section class="glass panel runp" id="runPanel" hidden aria-label="Checklist run"></section>
     <section class="stack" id="listsBox" aria-label="Checklists"></section>
     <section class="glass panel" id="autoBox" hidden aria-label="Mac autopilot"></section>
+    <section class="glass panel" id="progBox" hidden aria-label="Gym progress"></section>
   </div>
 
   <div class="stack page" id="pg-ideas" hidden>
@@ -711,6 +763,14 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
           </div>
           <div class="setrow" id="eveMore"><span>At</span><select class="inp" id="eveHour" aria-label="Recap hour"></select></div>
           <div class="setrow">
+            <span id="wkLabel">Weekly recap + roast</span>
+            <button type="button" class="switch" id="wkOn" role="switch" aria-checked="true" aria-labelledby="wkLabel"></button>
+          </div>
+          <div class="setrow" id="wkMore">
+            <span>When</span>
+            <span class="addrow"><select class="inp" id="wkDay" aria-label="Recap day"></select><select class="inp" id="wkHour" aria-label="Recap hour"></select></span>
+          </div>
+          <div class="setrow">
             <span id="lrLabel">Claude’s checklist tips</span>
             <button type="button" class="switch" id="lrOn" role="switch" aria-checked="true" aria-labelledby="lrLabel"></button>
           </div>
@@ -781,6 +841,109 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   </div>
 </div>
 
+<div class="sheet" id="itemSheet" hidden role="dialog" aria-modal="true" aria-labelledby="itemSheetTitle">
+  <div class="sheet-panel">
+    <div class="sheet-head">
+      <div>
+        <h2 id="itemSheetTitle">Edit</h2>
+        <div class="saved" id="ieState"></div>
+      </div>
+      <button type="button" class="done-btn" id="ieSave">save</button>
+    </div>
+    <div class="sheet-body">
+      <section id="ieKindSec">
+        <h3>Type</h3>
+        <div class="seg" id="ieKind" role="radiogroup" aria-label="Type">
+          <button type="button" role="radio" data-kind="idea">idea</button>
+          <button type="button" role="radio" data-kind="task">task</button>
+          <button type="button" role="radio" data-kind="note">note</button>
+          <button type="button" role="radio" data-kind="ask">ask</button>
+        </div>
+      </section>
+      <section id="ieTitleSec">
+        <h3>Title</h3>
+        <input class="inp" id="ieTitle" maxlength="80" aria-label="Title" enterkeyhint="done">
+      </section>
+      <section>
+        <h3 id="ieTextH">Text</h3>
+        <textarea class="inp" id="ieText" rows="5" aria-labelledby="ieTextH"></textarea>
+        <p class="hint" id="ieTextHint" style="margin-top:8px"></p>
+      </section>
+      <section id="iePhotoSec">
+        <h3>Photos</h3>
+        <div class="photos" id="iePhotos"></div>
+        <p class="hint" style="margin-top:8px" id="iePhotoHint"></p>
+      </section>
+      <section id="ieTagSec">
+        <h3>Project</h3>
+        <div class="chips" id="ieTags"></div>
+      </section>
+      <section>
+        <h3>Reminder</h3>
+        <div class="addrow">
+          <input type="datetime-local" class="inp" id="ieDue" aria-label="When to remind">
+          <button type="button" class="chip ghost" id="ieDueClear">clear</button>
+        </div>
+      </section>
+      <section>
+        <div class="box">
+          <div class="setrow">
+            <span id="iePinLabel">📌 Pin to the top of Today</span>
+            <button type="button" class="switch" id="iePin" role="switch" aria-checked="false" aria-labelledby="iePinLabel"></button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div class="sheet" id="todoSheet" hidden role="dialog" aria-modal="true" aria-labelledby="todoSheetTitle">
+  <div class="sheet-panel">
+    <div class="sheet-head">
+      <h2 id="todoSheetTitle">Task</h2>
+      <button type="button" class="done-btn" id="teSave">save</button>
+    </div>
+    <div class="sheet-body">
+      <section>
+        <h3>What</h3>
+        <input class="inp" id="teText" maxlength="200" aria-label="Task" enterkeyhint="done">
+      </section>
+      <section>
+        <h3>When</h3>
+        <div class="daychips">
+          <button type="button" class="chip" id="teToday">today</button>
+          <button type="button" class="chip" id="teTmrw">tmrw</button>
+          <input type="date" class="inp" id="teDay" aria-label="Day">
+          <select class="inp" id="teAt" aria-label="Deadline"></select>
+        </div>
+      </section>
+      <section>
+        <h3>Repeat</h3>
+        <div class="chips" id="teDays" aria-label="Repeat on"></div>
+        <div class="chips" style="margin-top:8px">
+          <button type="button" class="chip ghost" id="teEvery">every day</button>
+          <button type="button" class="chip ghost" id="teWork">weekdays</button>
+          <button type="button" class="chip ghost" id="teOnce">just once</button>
+        </div>
+        <p class="hint" style="margin-top:8px" id="teRepHint"></p>
+      </section>
+      <section>
+        <div class="box">
+          <div class="setrow">
+            <span id="tePinLabel">📌 Pin to the top of Today</span>
+            <button type="button" class="switch" id="tePin" role="switch" aria-checked="false" aria-labelledby="tePinLabel"></button>
+          </div>
+        </div>
+      </section>
+      <section id="teDanger">
+        <button type="button" class="mini danger" id="teDelete">delete task</button>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div class="viewer" id="viewer" hidden role="dialog" aria-label="Photo"><img id="viewerImg" alt=""></div>
+
 <div class="toast glass" id="toast" role="status" aria-live="polite"></div>
 
 <script>
@@ -810,11 +973,32 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   };
 
   var $ = function (id) { return document.getElementById(id); };
+
+  // Jarvis говорит на Gen Z сленге, и каждый раз по-разному
+  var SAY = {
+    sent: ['sent, it’s chillin’ in the inbox 📨', 'bet, it’s in 📨', 'yeet — sent 📨', 'sent. we move 📨'],
+    sentOk: ['sent ✓ Mac cooks it on “▶ Let’s go”', 'bet ✓ Mac handles it solo on “▶ Let’s go”'],
+    todoDone: ['W ✅', 'ate that ✅', 'cooked ✅', 'slay ✅', 'one less L ✅', 'easy dub ✅'],
+    allDone: ['all tasks done today — beast mode 💪', 'clean sweep, you’re him 🐐', 'zero left. main character energy ✨', 'day = cooked. respect 🫡'],
+    habit: ['ticked ✅ consistency goes hard', 'streak go brrr 🔥', 'W habit ✅', 'discipline unlocked 🔓'],
+    saved: ['saved ✓', 'locked in ✓', 'bet, saved ✓'],
+    deleted: ['deleted 🗑', 'yeeted 🗑', 'gone, reduced to atoms 🗑'],
+    pinned: ['📌 pinned to Today', '📌 pinned. it stays on top fr'],
+    unpinned: ['unpinned', 'unpinned — back to the shadows 🌑'],
+    pr: ['🏆 new PR: {t}! old best {b}. built different', '🏆 PR alert: {t} (was {b}). you’re him 🐐'],
+    runDone: ['done: {t}{b}. W 💪', 'cooked in {t}{b} 🔥', 'that’s a wrap: {t}{b}'],
+    levelUp: ['🆙 LEVEL {l} — you’re {r} now', '🆙 level {l} unlocked. rank: {r} 🔥'],
+    oops: ['💀 {e}', 'L: {e}']
+  };
+  function say(k, v) {
+    var a = SAY[k] || [k], s = a[Math.floor(Math.random() * a.length)];
+    return s.replace(/\{(\w+)\}/g, function (_, x) { return v && v[x] != null ? v[x] : ''; });
+  }
   var compose = $('compose'), note = $('note'), fileInput = $('file'), dueInput = $('due');
   var kind = 'idea', file = null, due = null, selTags = {}, freshId = null, busy = false;
   var approveNew = false, answerDrafts = {}, pollTimer = null;
   var ideaFilter = 'all', ideaQuery = '';
-  var data = { waiting: [], reports: [], archive: [], ideas: [], questions: [], last_sync: null, mac: null, run_request: null, settings: null };
+  var data = { waiting: [], reports: [], archive: [], ideas: [], questions: [], pinned: [], last_sync: null, mac: null, run_request: null, settings: null };
   var settings = { tz: 'Asia/Bishkek', cities: [], digest_on: true, digest_hour: 9, projects: [], templates: [] };
   var loaded = false;
 
@@ -938,6 +1122,9 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     if (extra) parts.push(extra);
     if (it.source === 'chat') parts.push('from chat');
     if (it.file_count) parts.push('📎 ' + it.file_count);
+    if ((it.photos || []).length) parts.push('📷 ' + it.photos.length);
+    if (it.pinned_at) parts.unshift('📌');
+    if (editPending(it)) parts.push('✎ edit queued for the Mac');
     p.appendChild(document.createTextNode(parts.join(' · ')));
     (it.tags || []).forEach(function (t) { p.appendChild(document.createTextNode(' ')); p.appendChild(el('span', 'tag', '#' + t)); });
     if (it.due_at) { p.appendChild(document.createTextNode(' ')); p.appendChild(el('span', 'due', '⏰ ' + when(it.due_at))); }
@@ -987,13 +1174,27 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
       }
       clearTimeout(armTimer);
       del.disabled = true;
-      call('/delete', { id: it.id }).then(function () { haptic('success'); toast('deleted'); refresh(); })
+      call('/delete', { id: it.id }).then(function () { haptic('success'); toast(say('deleted')); refresh(); })
         .catch(function (e) { del.disabled = false; toast(e.message, true); });
     });
-    if (it.body) more.appendChild(document.createElement('br'));
-    more.appendChild(del);
+    if ((it.photos || []).length) more.appendChild(photoStrip(it.photos));
+    var acts = el('div', 'acts');
+    acts.appendChild(btn('mini', '✎ edit', function () { openItemEditor(it); }));
+    acts.appendChild(pinBtn(it));
+    acts.appendChild(del);
+    more.appendChild(acts);
     d.appendChild(more);
     return d;
+  }
+
+  // карточка, которая уже у Mac: нажал — правка (заголовок, теги, срок, «что поменять»)
+  function tapEdit(d, it) {
+    if (it.status === 'dismissed') return;
+    d.classList.add('tap');
+    d.setAttribute('role', 'button');
+    d.tabIndex = 0;
+    d.addEventListener('click', function () { openItemEditor(it); });
+    d.addEventListener('keydown', function (e) { if (e.key === 'Enter') openItemEditor(it); });
   }
 
   function reportItem(it) {
@@ -1001,6 +1202,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     var isAsk = it.kind === 'ask';
     d.appendChild(headRow('div', it, isAsk ? 'var(--warn)' : 'var(--ok)', when(it.done_at), isAsk ? 'answer' : 'done', 'done', false));
     d.appendChild(el('p', 'report', it.report || 'Done — details in Jarvis.'));
+    tapEdit(d, it);
     return d;
   }
 
@@ -1008,6 +1210,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     var d = el('div', 'item glass');
     var st = ARCH_STATUS[it.status] || [it.status, ''];
     d.appendChild(headRow('div', it, (KIND[it.kind] || KIND.note).color, when(it.created_at), st[0], st[1], true));
+    tapEdit(d, it);
     return d;
   }
 
@@ -1033,6 +1236,12 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
       chips.appendChild(b);
     });
     more.appendChild(chips);
+    if ((it.photos || []).length) more.appendChild(photoStrip(it.photos));
+    var acts = el('div', 'acts');
+    acts.appendChild(btn('mini', '✎ edit', function () { openItemEditor(it); }));
+    acts.appendChild(btn('mini', '📷 photo', function () { openItemEditor(it, true); }));
+    acts.appendChild(pinBtn(it));
+    more.appendChild(acts);
     d.appendChild(more);
     return d;
   }
@@ -1158,6 +1367,248 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     $('nIdeas').textContent = active || '';
   }
 
+  // ---------- правка записи, закрепление, фото ----------
+  function editPending(it) { return !!it.edited_at && (!it.edit_taken_at || new Date(it.edit_taken_at) < new Date(it.edited_at)); }
+  function eachCopy(id, fn) {
+    ['waiting', 'reports', 'archive', 'ideas', 'pinned'].forEach(function (k) {
+      (data[k] || []).forEach(function (x) { if (x.id === id) fn(x); });
+    });
+  }
+  function mergeItem(it) {
+    if (!it) return;
+    eachCopy(it.id, function (x) { Object.assign(x, it); });
+    if (ie && ie.it.id === it.id) Object.assign(ie.it, it);
+  }
+  function localInput(d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+
+  function viewPhoto(url) {
+    if (!url) return;
+    $('viewerImg').src = url;
+    $('viewer').hidden = false;
+  }
+  $('viewer').addEventListener('click', function () { $('viewer').hidden = true; $('viewerImg').src = ''; });
+  function photoStrip(photos) {
+    var s = el('div', 'strip');
+    photos.forEach(function (p) {
+      if (!p.url) return;
+      var img = el('img'); img.src = p.url; img.alt = p.name || 'photo'; img.loading = 'lazy';
+      img.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); viewPhoto(p.url); });
+      s.appendChild(img);
+    });
+    return s;
+  }
+
+  function pinBtn(it) { return btn('mini', it.pinned_at ? '📌 unpin' : '📌 pin', function () { togglePin(it, false); }); }
+  function togglePin(it, todo) {
+    var next = !it.pinned_at, at = next ? new Date().toISOString() : null;
+    tap(); toast(say(next ? 'pinned' : 'unpinned'));
+    if (todo) { it.pinned_at = at; renderPinned(); renderTodos(); }
+    else {
+      eachCopy(it.id, function (x) { x.pinned_at = at; });
+      it.pinned_at = at;
+      data.pinned = (data.pinned || []).filter(function (x) { return x.id !== it.id; });
+      if (next) data.pinned.push(it);
+      render();
+    }
+    call('/pin', { id: it.id, pinned: next, todo: !!todo }).catch(function (e) { toast(e.message, true); refresh(true); loadDela(); });
+  }
+
+  function renderPinned() {
+    var box = $('pinBox');
+    box.textContent = '';
+    var items = data.pinned || [];
+    var todos = dela.todos.filter(function (t) { return t.pinned_at && !t.done_at; })
+      .sort(function (a, b) { return todoDeadline(a) - todoDeadline(b); });
+    box.hidden = !items.length && !todos.length;
+    if (box.hidden) return;
+    var h = el('div', 'panel-h');
+    h.appendChild(el('h2', '', '📌 Pinned'));
+    box.appendChild(h);
+    todos.forEach(function (t) {
+      var r = el('div', 'pinrow');
+      var c = btn('chk', '✓', function (e) { e.stopPropagation(); toggleTodo(t); });
+      c.setAttribute('aria-label', 'Done: ' + t.text);
+      r.appendChild(c);
+      r.appendChild(el('span', 'pt', t.text));
+      r.appendChild(el('span', 'pw', todoWhen(t)));
+      r.addEventListener('click', function () { openTodoEditor(t); });
+      box.appendChild(r);
+    });
+    items.forEach(function (it) {
+      var r = el('div', 'pinrow');
+      r.appendChild(dot((KIND[it.kind] || KIND.note).color));
+      r.appendChild(el('span', 'pt', it.title));
+      r.appendChild(el('span', 'pw', it.due_at ? '⏰ ' + when(it.due_at) : it.status === 'done' ? 'done' : (KIND[it.kind] || KIND.note).label));
+      var x = btn('x', '×', function (e) { e.stopPropagation(); togglePin(it, false); });
+      x.setAttribute('aria-label', 'Unpin ' + it.title);
+      r.appendChild(x);
+      r.addEventListener('click', function () { openItemEditor(it); });
+      box.appendChild(r);
+    });
+  }
+
+  // --- окно правки записи ---
+  var ie = null;
+  function onItemBack() { hideItemSheet(); }
+  function openItemEditor(it, photoFirst) {
+    if (!it || it.status === 'dismissed') return;
+    var waiting = it.status === 'waiting';
+    ie = { it: it, waiting: waiting, kind: it.kind, tags: {}, due: it.due_at ? new Date(it.due_at) : null, pinned: !!it.pinned_at, uploading: 0 };
+    (it.tags || []).forEach(function (t) { ie.tags[t] = true; });
+    $('itemSheetTitle').textContent = waiting ? 'Edit entry' : 'Edit · already on the Mac';
+    $('ieState').textContent = waiting ? 'still in the cloud — edits land as-is'
+      : editPending(it) ? '✎ an edit is already queued, this one stacks on top' : 'Mac rewrites the file in Jarvis on the next sync';
+    $('ieKindSec').hidden = !waiting;
+    $('ieTitleSec').hidden = waiting;
+    $('ieTitle').value = it.title || '';
+    $('ieTextH').textContent = waiting ? 'Text' : 'What to change';
+    $('ieText').value = waiting ? (it.body || '') : '';
+    $('ieText').placeholder = waiting ? 'what’s on your mind?' : 'e.g. price is $50 now, add Karakol to the route';
+    $('ieTextHint').textContent = waiting ? '' : 'The full text lives in Jarvis on the Mac. Write what to change — Claude rewrites the file on the next sync. Title, project and reminder change right away.';
+    $('ieTextHint').hidden = waiting;
+    $('ieDue').value = ie.due ? localInput(ie.due) : '';
+    renderItemEditor();
+    $('itemSheet').hidden = false;
+    document.body.classList.add('locked');
+    try { tg.BackButton.onClick(onItemBack); tg.BackButton.show(); } catch (e) {}
+    if (photoFirst) setTimeout(function () { $('iePhotoSec').scrollIntoView({ block: 'center' }); }, 60);
+  }
+  function hideItemSheet() {
+    if ($('itemSheet').hidden) return;
+    $('itemSheet').hidden = true;
+    document.body.classList.remove('locked');
+    try { tg.BackButton.offClick(onItemBack); tg.BackButton.hide(); } catch (e) {}
+    ie = null;
+  }
+  function renderItemEditor() {
+    if (!ie) return;
+    document.querySelectorAll('#ieKind [data-kind]').forEach(function (b) {
+      b.setAttribute('aria-checked', b.dataset.kind === ie.kind ? 'true' : 'false');
+    });
+    var tb = $('ieTags'), projs = (settings.projects || []).slice();
+    tb.textContent = '';
+    Object.keys(ie.tags).forEach(function (t) { if (projs.indexOf(t) === -1) projs.push(t); });
+    projs.forEach(function (p) {
+      var b = btn('chip', '#' + p, function () { if (ie.tags[p]) delete ie.tags[p]; else ie.tags[p] = true; tap(); renderItemEditor(); });
+      b.setAttribute('aria-pressed', ie.tags[p] ? 'true' : 'false');
+      tb.appendChild(b);
+    });
+    $('ieTagSec').hidden = !projs.length;
+    $('iePin').setAttribute('aria-checked', ie.pinned ? 'true' : 'false');
+    var photos = ie.kind === 'idea' || (ie.it.photos || []).length;
+    $('iePhotoSec').hidden = !photos;
+    if (photos) renderPhotos();
+  }
+  function renderPhotos() {
+    var box = $('iePhotos'), it = ie.it, list = it.photos || [];
+    box.textContent = '';
+    list.forEach(function (p) {
+      var c = el('div', 'photo');
+      var img = el('img'); img.src = p.url || ''; img.alt = p.name || 'photo'; img.loading = 'lazy';
+      img.addEventListener('click', function () { viewPhoto(p.url); });
+      c.appendChild(img);
+      var x = btn('', '×'), armed = false;
+      x.setAttribute('aria-label', 'Remove photo');
+      x.addEventListener('click', function () {
+        if (!armed) { armed = true; x.textContent = '?'; toast('tap again to delete the photo'); setTimeout(function () { armed = false; x.textContent = '×'; }, 3000); return; }
+        x.disabled = true;
+        call('/item/photo', { id: it.id, remove: p.path }).then(function (j) { mergeItem(j.item); tap(); renderPhotos(); render(); })
+          .catch(function (e) { x.disabled = false; toast(say('oops', { e: e.message }), true); });
+      });
+      c.appendChild(x);
+      box.appendChild(c);
+    });
+    for (var i = 0; i < ie.uploading; i++) box.appendChild(el('div', 'photo busy', 'uploading…'));
+    if (list.length + ie.uploading < 12) {
+      var add = el('label', 'photo add', '+');
+      var inp = el('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = true;
+      inp.setAttribute('aria-label', 'Add photos');
+      inp.addEventListener('change', function () { var f = [].slice.call(inp.files || []); inp.value = ''; addPhotos(f); });
+      add.appendChild(inp);
+      box.appendChild(add);
+    }
+    $('iePhotoHint').textContent = ie.waiting
+      ? 'Photos ride along to the Mac and stay here on the idea board.'
+      : 'New photos land next to the idea in Jarvis on the next sync. Up to 12.';
+  }
+  // фото ужимаем на телефоне: до 1600 px и JPEG — грузится быстро и места в облаке занимает мало
+  function shrink(f) {
+    return new Promise(function (ok) {
+      if (!/^image\//.test(f.type) || /gif/.test(f.type)) return ok(f);
+      var url = URL.createObjectURL(f), img = new Image();
+      img.onload = function () {
+        var k = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
+        var c = document.createElement('canvas');
+        c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        c.toBlob(function (b) {
+          if (!b || b.size >= f.size) return ok(f);
+          ok(new File([b], (f.name || 'photo').replace(/\.\w+$/, '') + '.jpg', { type: 'image/jpeg' }));
+        }, 'image/jpeg', 0.82);
+      };
+      img.onerror = function () { URL.revokeObjectURL(url); ok(f); };
+      img.src = url;
+    });
+  }
+  function addPhotos(files) {
+    if (!ie || !files.length) return;
+    var it = ie.it, cur = ie;
+    files = files.slice(0, 12 - (it.photos || []).length - cur.uploading);
+    cur.uploading += files.length;
+    renderPhotos();
+    files.reduce(function (chain, f) {
+      return chain.then(function () {
+        if (f.size > 25 * 1024 * 1024) throw new Error('photo’s over 25 MB');
+        return shrink(f).then(function (g) {
+          return call('/upload', { photo: true, name: g.name, size: g.size, mime: g.type }).then(function (u) {
+            return fetch(u.url, { method: 'PUT', headers: { 'content-type': g.type || 'image/jpeg' }, body: g }).then(function (r) {
+              if (!r.ok) throw new Error('upload failed (' + r.status + ')');
+              return call('/item/photo', { id: it.id, add: { path: u.path, name: g.name, size: g.size, mime: g.type || 'image/jpeg' } });
+            });
+          });
+        }).then(function (j) { mergeItem(j.item); haptic('success'); });
+      }).catch(function (e) { toast(say('oops', { e: e.message }), true); })
+        .then(function () { cur.uploading--; if (ie === cur) renderPhotos(); });
+    }, Promise.resolve()).then(function () { render(); });
+  }
+  function saveItem() {
+    if (!ie) return;
+    var it = ie.it, cur = ie;
+    var body = { id: it.id, tags: Object.keys(ie.tags), due_at: ie.due ? ie.due.toISOString() : null, pinned: ie.pinned };
+    if (ie.waiting) {
+      body.text = $('ieText').value; body.kind = ie.kind;
+      if (!body.text.trim() && !it.file_count && !(it.photos || []).length) { $('ieText').focus(); toast('write something first'); return; }
+    } else {
+      body.title = $('ieTitle').value.trim(); body.note = $('ieText').value.trim();
+      if (!body.title) { $('ieTitle').focus(); toast('title can’t be empty, bro'); return; }
+    }
+    $('ieSave').disabled = true;
+    call('/item/save', body).then(function (j) {
+      mergeItem(j.item);
+      data.pinned = (data.pinned || []).filter(function (x) { return x.id !== it.id; });
+      if (j.item && j.item.pinned_at) data.pinned.push(j.item);
+      haptic('success');
+      toast(j.same ? 'nothing changed 🤷' : cur.waiting ? say('saved') : 'saved ✓ Mac rewrites the file on the next sync');
+      hideItemSheet(); render(); refresh(true);
+    }).catch(function (e) { toast(say('oops', { e: e.message }), true); })
+      .then(function () { $('ieSave').disabled = false; });
+  }
+  (function initItemEditor() {
+    document.querySelectorAll('#ieKind [data-kind]').forEach(function (b) {
+      b.addEventListener('click', function () { if (!ie) return; ie.kind = b.dataset.kind; tap(); renderItemEditor(); });
+    });
+    $('iePin').addEventListener('click', function () { if (!ie) return; ie.pinned = !ie.pinned; tap(); renderItemEditor(); });
+    $('ieDue').addEventListener('change', function () {
+      if (!ie) return;
+      var d = $('ieDue').value ? new Date($('ieDue').value) : null;
+      ie.due = d && !isNaN(d.getTime()) ? d : null;
+    });
+    $('ieDueClear').addEventListener('click', function () { if (!ie) return; ie.due = null; $('ieDue').value = ''; tap(); });
+    $('ieSave').addEventListener('click', saveItem);
+    $('itemSheet').addEventListener('click', function (e) { if (e.target === $('itemSheet')) hideItemSheet(); });
+  })();
+
   function render() {
     fill('lWait', data.waiting, waitingItem, 'All clear. New stuff waits here till you hit “▶ Let’s go” or say “sync” at the Mac.');
     fill('lRep', data.reports, reportItem, 'Claude’s replies on finished tasks show up here.');
@@ -1170,6 +1621,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     renderMac();
     renderTiles();
     renderToday();
+    renderPinned();
     renderPageHead();
   }
 
@@ -1271,6 +1723,8 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     var wasWorking = macWorking() || !!data.run_request;
     return call('/list').then(function (j) {
       data = j;
+      data.pinned = j.pinned || [];
+      if (ie) { var fresh = null; eachCopy(ie.it.id, function (x) { fresh = fresh || x; }); if (fresh) ie.it = fresh; }
       if (j.now) { var t = new Date(j.now).getTime(); if (isFinite(t)) clockSkew = t - Date.now(); }
       startClock();
       data.ideas = j.ideas || [];
@@ -1341,8 +1795,8 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
       freshId = j.item && j.item.id;
       haptic('success');
       if (j.mac) { data.mac = j.mac; data.run_request = new Date().toISOString(); }
-      if (j.item && j.item.kind === 'ask') toast(j.mac && j.mac.online ? 'asked the Mac — answer lands in “done”' : 'question queued — Mac’s offline');
-      else toast(j.item && j.item.approved ? 'sent ✓ Mac does it on “▶ Let’s go”' : 'sent, it’s waiting');
+      if (j.item && j.item.kind === 'ask') toast(j.mac && j.mac.online ? 'asked the Mac 🧠 answer lands in “done”' : 'question queued — Mac’s ghosting rn 😴');
+      else toast(say(j.item && j.item.approved ? 'sentOk' : 'sent'));
       selectTab('wait');
       closeCompose();
       if (view !== 'today') selectView('inbox');
@@ -1510,6 +1964,10 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     $('eveOn').setAttribute('aria-checked', draft.evening.on ? 'true' : 'false');
     $('eveMore').hidden = !draft.evening.on;
     $('eveHour').value = String(draft.evening.hour);
+    $('wkOn').setAttribute('aria-checked', draft.weekly.on ? 'true' : 'false');
+    $('wkMore').hidden = !draft.weekly.on;
+    $('wkDay').value = String(draft.weekly.day);
+    $('wkHour').value = String(draft.weekly.hour);
     $('lrOn').setAttribute('aria-checked', draft.list_review.on ? 'true' : 'false');
     $('lrMore').hidden = !draft.list_review.on;
     $('lrDay').value = String(draft.list_review.day);
@@ -1557,6 +2015,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     draft.evening = draft.evening || { on: true, hour: 21 };
     draft.list_review = draft.list_review || { on: true, day: 7, hour: 11 };
     draft.todo_nag = draft.todo_nag || { on: true, hour: 18, every: 60, quiet_from: 23, quiet_to: 9 };
+    draft.weekly = draft.weekly || { on: true, day: 7, hour: 20 };
     addingCity = addingProj = addingTpl = addingSched = false;
     $('citySearch').value = ''; $('cityResults').textContent = '';
     setSaveState('autosaves');
@@ -1575,7 +2034,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
 
   (function initHours() {
     [15, 30, 60, 120, 180].forEach(function (m) { $('nagEvery').appendChild(new Option(m < 60 ? m + ' min' : (m / 60) + ' h', String(m))); });
-    ['digestHour', 'reviewHour', 'eveHour', 'lrHour', 'nagHour', 'nagQf', 'nagQt'].forEach(function (id) {
+    ['digestHour', 'reviewHour', 'eveHour', 'lrHour', 'nagHour', 'nagQf', 'nagQt', 'wkHour'].forEach(function (id) {
       for (var h = 0; h < 24; h++) $(id).appendChild(new Option(pad(h) + ':00', String(h)));
     });
     ['schedHour', 'leRemHour'].forEach(function (id) {
@@ -1584,7 +2043,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     ['schedMin', 'leRemMin'].forEach(function (id) {
       [0, 15, 30, 45].forEach(function (m) { $(id).appendChild(new Option(':' + pad(m), String(m))); });
     });
-    ['reviewDay', 'lrDay'].forEach(function (id) {
+    ['reviewDay', 'lrDay', 'wkDay'].forEach(function (id) {
       for (var d = 1; d <= 7; d++) $(id).appendChild(new Option(DAYS[d], String(d)));
     });
     $('schedHour').value = '9';
@@ -1598,6 +2057,9 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   $('eveOn').addEventListener('click', function () { draft.evening.on = !draft.evening.on; tap(); changed(); });
   $('eveHour').addEventListener('change', function () { draft.evening.hour = +$('eveHour').value; changed(); });
   $('lrOn').addEventListener('click', function () { draft.list_review.on = !draft.list_review.on; tap(); changed(); });
+  $('wkOn').addEventListener('click', function () { draft.weekly.on = !draft.weekly.on; tap(); changed(); });
+  $('wkDay').addEventListener('change', function () { draft.weekly.day = +$('wkDay').value; changed(); });
+  $('wkHour').addEventListener('change', function () { draft.weekly.hour = +$('wkHour').value; changed(); });
   $('lrDay').addEventListener('change', function () { draft.list_review.day = +$('lrDay').value; changed(); });
   $('lrHour').addEventListener('change', function () { draft.list_review.hour = +$('lrHour').value; changed(); });
 
@@ -1627,6 +2089,9 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   $('sheet').addEventListener('click', function (e) { if (e.target === $('sheet')) closeSheet(); });
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
+    if (!$('viewer').hidden) { $('viewer').hidden = true; return; }
+    if (!$('itemSheet').hidden) { hideItemSheet(); return; }
+    if (!$('todoSheet').hidden) { hideTodoSheet(); return; }
     if (!$('listSheet').hidden) closeListEditor();
     else if (!$('composeSheet').hidden) closeCompose();
     else closeSheet();
@@ -1675,7 +2140,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   $('tplLabel').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); addTemplate(); } });
 
   // ---------- дела: привычки и чек-листы ----------
-  var dela = { lists: [], runs: [], habits: [], marks: [], todos: [] }, delaLoaded = false;
+  var dela = { lists: [], runs: [], habits: [], marks: [], todos: [], series: [], xp: null }, delaLoaded = false;
   var todoDay = 'today', todoEdit = false;
   var view = 'inbox', run = null, runSaveTimer = null, tickTimer = null;
   var habitEdit = false, addingHabit = false, openStats = {};
@@ -1711,7 +2176,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     });
     var pg = 'pg-' + (PAGE_EL[view] || view);
     document.querySelectorAll('.page').forEach(function (x) { x.hidden = x.id !== pg; });
-    if (view === 'gym' || view === 'work') { renderRun(); renderLists(); renderAuto(); }
+    if (view === 'gym' || view === 'work') { renderRun(); renderLists(); renderAuto(); renderProg(); }
     renderPageHead();
     window.scrollTo(0, 0);
     if (DELA_VIEWS.indexOf(view) !== -1) loadDela();
@@ -1781,7 +2246,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
       rows.push({ t: d.getTime(), text: l.title, when: 'today ' + pad(l.remind.hour) + ':' + pad(l.remind.minute), color: 'var(--ok)', list: l });
     });
     rows.sort(function (a, b) { return a.t - b.t; });
-    if (!rows.length) { box.appendChild(el('p', 'hint', 'Nothing due in the next 3 days. Chill.')); return; }
+    if (!rows.length) { box.appendChild(el('p', 'hint', 'Nothing due in the next 3 days. Touch grass 🌱')); return; }
     rows.slice(0, 6).forEach(function (r) {
       var row = el('div', 'due-row');
       row.appendChild(dot(r.color));
@@ -1794,8 +2259,10 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
 
   function loadDela() {
     return call('/dela').then(function (j) {
-      dela = { lists: j.lists || [], runs: j.runs || [], habits: j.habits || [], marks: j.marks || [], todos: j.todos || [] };
+      dela = { lists: j.lists || [], runs: j.runs || [], habits: j.habits || [], marks: j.marks || [], todos: j.todos || [],
+        series: j.series || [], xp: j.xp || null };
       delaLoaded = true;
+      checkLevel();
       var act = dela.runs.filter(function (r) { return r.status === 'active'; })[0] || null;
       // своё незаконченное прохождение не затираем ответом облака
       if (act && !(run && run.id === act.id)) run = act;
@@ -1806,7 +2273,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
 
   function renderDela() {
     setRunDots();
-    renderRun(); renderHabits(); renderLists(); renderAuto(); renderTodos(); renderToday(); renderPageHead();
+    renderRun(); renderHabits(); renderLists(); renderAuto(); renderProg(); renderTodos(); renderToday(); renderPinned(); renderXp(); renderPageHead();
   }
   function catOf(l) { return l && l.cat === 'work' ? 'work' : 'gym'; }
   function runCat() { return run ? catOf(listById(run.list_id)) : null; }
@@ -1835,6 +2302,18 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   function everyLabel(m) { return m < 60 ? m + ' min' : m === 60 ? 'hour' : (m / 60) + ' h'; }
   function renderTodoAll() { renderTodos(); renderTiles(); renderPageHead(); }
 
+  function todoWhen(t) {
+    var today = localDay(), at = t.at || defAt(), pings = t.nags ? ' · 🔔' + t.nags : '';
+    var late = !t.done_at && t.day <= today && todoDeadline(t) <= Date.now();
+    if (t.done_at) { var d = new Date(t.done_at); return '✓ ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+    if (t.day < today) return 'since ' + shortDay(t.day) + pings;
+    if (t.day > today) return (t.day === dayShift(today, 1) ? 'tmrw ' : shortDay(t.day) + ' ') + at;
+    return (late ? 'late · ' : 'by ') + at + pings;
+  }
+  function seriesOf(t) {
+    return t.series_id ? (dela.series || []).filter(function (x) { return x.id === t.series_id; })[0] || null : null;
+  }
+
   function todoRow(t) {
     var today = localDay(), late = !t.done_at && t.day <= today && todoDeadline(t) <= Date.now();
     var r = el('div', 'trow' + (t.done_at ? ' done' : '') + (late ? ' late' : ''));
@@ -1842,13 +2321,15 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     c.setAttribute('aria-pressed', t.done_at ? 'true' : 'false');
     c.setAttribute('aria-label', t.text + (t.done_at ? ': done' : ': not yet'));
     r.appendChild(c);
-    r.appendChild(el('span', 'tt', t.text));
-    var w, at = t.at || defAt(), pings = t.nags ? ' · 🔔' + t.nags : '';
-    if (t.done_at) { var d = new Date(t.done_at); w = '✓ ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); }
-    else if (t.day < today) w = 'since ' + shortDay(t.day) + pings;
-    else if (t.day > today) w = (t.day === dayShift(today, 1) ? 'tmrw ' : shortDay(t.day) + ' ') + at;
-    else w = (late ? 'late · ' : 'by ') + at + pings;
-    r.appendChild(el('span', 'tw2', w));
+    var tt = el('span', 'tt');
+    if (t.pinned_at) tt.appendChild(el('span', 'ic', '📌'));
+    if (seriesOf(t)) tt.appendChild(el('span', 'ic', '🔁'));
+    tt.appendChild(document.createTextNode(t.text));
+    tt.setAttribute('role', 'button'); tt.tabIndex = 0;
+    tt.addEventListener('click', function () { openTodoEditor(t); });
+    tt.addEventListener('keydown', function (e) { if (e.key === 'Enter') openTodoEditor(t); });
+    r.appendChild(tt);
+    r.appendChild(el('span', 'tw2', todoWhen(t)));
     if (todoEdit) {
       if (!t.done_at) {
         var fwd = t.day <= today;
@@ -1861,7 +2342,8 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
       del.addEventListener('click', function () {
         if (!armed) { armed = true; del.textContent = '?'; toast('tap again to delete'); setTimeout(function () { armed = false; del.textContent = '×'; }, 3000); return; }
         dela.todos = dela.todos.filter(function (x) { return x !== t; });
-        tap(); renderTodoAll();
+        tap(); renderTodoAll(); renderPinned();
+        if (seriesOf(t)) toast('deleted for today — it repeats again. Tap a task → “just once” to stop');
         call('/todo/delete', { id: t.id }).catch(function (e) { toast(e.message, true); loadDela(); });
       });
       r.appendChild(del);
@@ -1899,7 +2381,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
         ? 'Nothing planned. Drop what you gotta get done today — miss the deadline and the bot keeps pinging till you tick it.'
         : 'loading…'));
     } else if (st.total && st.done === st.total && !before.length) {
-      box.appendChild(el('p', 'hint', 'All done today. Beast mode 💪'));
+      box.appendChild(el('p', 'hint', 'All done today. Beast mode 💪 Go touch grass.'));
     }
     if (later.length) {
       box.appendChild(el('p', 'tsec', 'tomorrow & later'));
@@ -1910,18 +2392,21 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     $('todoHint').textContent = n.on === false
       ? 'Pings are off — turn them on in ⚙ → Tasks.'
       : 'Not ticked by the deadline → bot pings you every ' + everyLabel(n.every) + ' with a ✅ button' +
-        (n.quiet_from !== n.quiet_to ? ' (quiet ' + pad(n.quiet_from) + '–' + pad(n.quiet_to) + ')' : '') + '. Tweak it in ⚙.';
+        (n.quiet_from !== n.quiet_to ? ' (quiet ' + pad(n.quiet_from) + '–' + pad(n.quiet_to) + ')' : '') + '. Tap a task to edit, repeat 🔁 or pin 📌 it.';
     $('tdToday').setAttribute('aria-pressed', todoDay === 'today' ? 'true' : 'false');
     $('tdTmrw').setAttribute('aria-pressed', todoDay === 'tmrw' ? 'true' : 'false');
   }
 
   function toggleTodo(t) {
     var done = !t.done_at;
+    var pts = 10 + ((done ? Date.now() : new Date(t.done_at).getTime()) <= todoDeadline(t) ? 5 : 0);
     t.done_at = done ? new Date().toISOString() : null;
     if (done) haptic('success'); else tap();
     var st = todoStats();
-    if (done && t.day === localDay() && st.done === st.total && !st.before) toast('all tasks done today 💪 beast mode');
-    renderTodoAll();
+    if (done && t.day === localDay() && st.done === st.total && !st.before) toast(say('allDone') + ' · +' + pts + ' XP');
+    else if (done) toast(say('todoDone') + ' · +' + pts + ' XP');
+    bumpXp(done ? pts : -pts);
+    renderTodoAll(); renderPinned();
     call('/todo/done', { id: t.id, done: done }).then(function (j) { Object.assign(t, j.todo); renderTodoAll(); })
       .catch(function (e) { toast(e.message, true); loadDela(); });
   }
@@ -1940,7 +2425,8 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
       dela.todos.push(j.todo);
       $('tdText').value = '';
       haptic('success');
-      if (todoDay === 'today' && todoDeadline(j.todo) <= Date.now()) toast('that time’s already gone — bot pings you right away');
+      if (todoDay === 'today' && todoDeadline(j.todo) <= Date.now()) toast('that time’s already gone — bot’s pinging you right away 💀');
+      else toast(pick(['bet, added ✓', 'locked in ✓ don’t fumble it', 'added. you got this 👑']));
       renderTodoAll();
     }).catch(function (e) { toast(e.message, true); })
       .then(function () { $('tdAdd').disabled = false; });
@@ -1954,6 +2440,134 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     $('tdToday').addEventListener('click', function () { todoDay = 'today'; tap(); renderTodos(); });
     $('tdTmrw').addEventListener('click', function () { todoDay = 'tmrw'; tap(); renderTodos(); });
   })();
+
+  // --- окно правки дела: текст, день, срок, повтор, закрепление ---
+  var te = null;
+  function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+  function onTodoBack() { hideTodoSheet(); }
+  function openTodoEditor(t) {
+    var sr = seriesOf(t);
+    te = { t: t, day: t.day, days: sr ? sr.days.slice() : [], pinned: !!t.pinned_at };
+    $('teText').value = t.text;
+    $('teAt').value = t.at || '';
+    $('teAt').options[0].textContent = 'by ' + defAt() + ' (default)';
+    renderTodoEditor();
+    $('todoSheet').hidden = false;
+    document.body.classList.add('locked');
+    try { tg.BackButton.onClick(onTodoBack); tg.BackButton.show(); } catch (e) {}
+  }
+  function hideTodoSheet() {
+    if ($('todoSheet').hidden) return;
+    $('todoSheet').hidden = true;
+    document.body.classList.remove('locked');
+    try { tg.BackButton.offClick(onTodoBack); tg.BackButton.hide(); } catch (e) {}
+    te = null;
+  }
+  function renderTodoEditor() {
+    var today = localDay();
+    $('teToday').setAttribute('aria-pressed', te.day === today ? 'true' : 'false');
+    $('teTmrw').setAttribute('aria-pressed', te.day === dayShift(today, 1) ? 'true' : 'false');
+    $('teDay').value = te.day;
+    var box = $('teDays');
+    box.textContent = '';
+    for (var d = 1; d <= 7; d++) (function (day) {
+      var b = btn('chip', DAYS[day], function () {
+        var k = te.days.indexOf(day);
+        if (k === -1) te.days.push(day); else te.days.splice(k, 1);
+        te.days.sort(); tap(); renderTodoEditor();
+      });
+      b.setAttribute('aria-pressed', te.days.indexOf(day) !== -1 ? 'true' : 'false');
+      box.appendChild(b);
+    })(d);
+    $('teRepHint').textContent = te.days.length
+      ? '🔁 Pops up by itself ' + (te.days.length === 7 ? 'every day' : 'on ' + te.days.map(function (x) { return DAYS[x]; }).join(', ')) + ' — same deadline, same pings. Daily grind unlocked.'
+      : 'One-off. Pick days to make it a daily grind.';
+    $('tePin').setAttribute('aria-checked', te.pinned ? 'true' : 'false');
+  }
+  function saveTodoEdit() {
+    if (!te) return;
+    var t = te.t, text = $('teText').value.trim();
+    if (!text) { $('teText').focus(); toast('type the task first'); return; }
+    var hadSeries = seriesOf(t);
+    $('teSave').disabled = true;
+    call('/todo/save', { id: t.id, text: text, day: te.day, at: $('teAt').value || null, repeat: te.days.slice(), pinned: te.pinned }).then(function (j) {
+      Object.assign(t, j.todo);
+      dela.series = (dela.series || []).filter(function (x) { return !(hadSeries && x.id === hadSeries.id) && !(j.series && x.id === j.series.id); });
+      if (j.series && !j.series.archived) dela.series.push(j.series);
+      haptic('success'); toast(say('saved'));
+      hideTodoSheet(); renderTodoAll(); renderPinned();
+    }).catch(function (e) { toast(say('oops', { e: e.message }), true); })
+      .then(function () { $('teSave').disabled = false; });
+  }
+  (function initTodoEditor() {
+    var s = $('teAt');
+    s.appendChild(new Option('by 18:00 (default)', ''));
+    for (var m = 6 * 60; m < 24 * 60; m += 30) s.appendChild(new Option('by ' + pad(Math.floor(m / 60)) + ':' + pad(m % 60), pad(Math.floor(m / 60)) + ':' + pad(m % 60)));
+    $('teToday').addEventListener('click', function () { te.day = localDay(); tap(); renderTodoEditor(); });
+    $('teTmrw').addEventListener('click', function () { te.day = dayShift(localDay(), 1); tap(); renderTodoEditor(); });
+    $('teDay').addEventListener('change', function () { if (/^\d{4}-\d{2}-\d{2}$/.test($('teDay').value)) te.day = $('teDay').value; renderTodoEditor(); });
+    $('teEvery').addEventListener('click', function () { te.days = [1, 2, 3, 4, 5, 6, 7]; tap(); renderTodoEditor(); });
+    $('teWork').addEventListener('click', function () { te.days = [1, 2, 3, 4, 5]; tap(); renderTodoEditor(); });
+    $('teOnce').addEventListener('click', function () { te.days = []; tap(); renderTodoEditor(); });
+    $('tePin').addEventListener('click', function () { te.pinned = !te.pinned; tap(); renderTodoEditor(); });
+    $('teSave').addEventListener('click', saveTodoEdit);
+    $('teText').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); saveTodoEdit(); } });
+    $('todoSheet').addEventListener('click', function (e) { if (e.target === $('todoSheet')) hideTodoSheet(); });
+    var armed = false;
+    $('teDelete').addEventListener('click', function () {
+      if (!te) return;
+      if (!armed) { armed = true; $('teDelete').textContent = 'tap again to delete'; setTimeout(function () { armed = false; $('teDelete').textContent = 'delete task'; }, 3000); return; }
+      var t = te.t;
+      call('/todo/delete', { id: t.id }).then(function () {
+        dela.todos = dela.todos.filter(function (x) { return x !== t; });
+        toast(seriesOf(t) ? 'deleted for today — it still repeats 🔁' : say('deleted'));
+        hideTodoSheet(); renderTodoAll(); renderPinned();
+      }).catch(function (e) { toast(e.message, true); });
+    });
+  })();
+
+  // ---------- XP, уровень и серия дней ----------
+  var RANKS = [[1, 'NPC'], [2, 'rookie'], [3, 'lowkey grinding'], [5, 'him'], [8, 'built different'], [12, 'main character'], [16, 'goated'], [20, 'final boss']];
+  var xpOpen = false;
+  function rankOf(l) { var r = 'NPC'; RANKS.forEach(function (x) { if (l >= x[0]) r = x[1]; }); return r; }
+  function levelOf(xp) { var l = 1; while (50 * (l + 1) * l <= xp) l++; return l; }
+  function checkLevel() {
+    var x = dela.xp;
+    if (!x) return;
+    var prev = +(load('mj-level') || 0);
+    if (prev && x.level > prev) { haptic('success'); setTimeout(function () { toast(say('levelUp', { l: x.level, r: x.rank })); }, 900); }
+    store('mj-level', String(x.level));
+  }
+  function bumpXp(n) {
+    var x = dela.xp;
+    if (!x) return;
+    x.xp = Math.max(0, x.xp + n); x.today = Math.max(0, x.today + n); x.week = Math.max(0, x.week + n);
+    if (n > 0 && !x.alive) { x.alive = true; x.streak++; if (x.streak > x.best) x.best = x.streak; }
+    x.level = levelOf(x.xp); x.rank = rankOf(x.level);
+    x.into = x.xp - 50 * x.level * (x.level - 1); x.need = 100 * x.level;
+    renderXp(); checkLevel();
+  }
+  function renderXp() {
+    var box = $('xpBox'), x = dela.xp;
+    box.textContent = '';
+    if (!x) { box.appendChild(el('div', 'xs', delaLoaded ? 'XP offline rn' : 'loading XP…')); return; }
+    var r = el('div', 'xr');
+    var lv = el('span', 'lv', 'LVL ' + x.level);
+    lv.appendChild(el('small', '', x.rank));
+    r.appendChild(lv);
+    r.appendChild(el('span', 'sk' + (x.streak ? '' : ' dim'), x.streak ? '🔥 ' + x.streak + ' day' + (x.streak === 1 ? '' : 's') + (x.alive ? '' : ' · save it!') : 'no streak yet'));
+    box.appendChild(r);
+    var bar = el('div', 'bar'), fillI = el('i');
+    fillI.style.width = Math.max(2, Math.min(100, x.into / x.need * 100)).toFixed(1) + '%';
+    bar.appendChild(fillI);
+    box.appendChild(bar);
+    box.appendChild(el('div', 'xs', x.into + '/' + x.need + ' XP to LVL ' + (x.level + 1) + ' · +' + x.today + ' today · ' + x.week + ' this week'));
+    if (xpOpen) box.appendChild(el('div', 'how', 'Task ✓ +10 (+5 if before the deadline) · habit +5 · finished checklist +25. ' +
+      'Streak = days in a row you did at least one. Best streak: ' + x.best + ' · total ' + x.xp + ' XP. ' +
+      'Ranks: NPC → rookie → lowkey grinding → him → built different → main character → goated → final boss.'));
+  }
+  $('xpBox').addEventListener('click', function () { xpOpen = !xpOpen; tap(); renderXp(); });
+  $('xpBox').addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); xpOpen = !xpOpen; renderXp(); } });
 
   // ---------- Work: автопилот Mac ----------
   function renderAuto() {
@@ -2010,9 +2624,10 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     var day = localDay();
     if (done) dela.marks.push({ habit_id: x.id, day: day });
     else dela.marks = dela.marks.filter(function (m) { return !(m.habit_id === x.id && m.day === day); });
-    if (done) haptic('success'); else tap();
+    if (done) { haptic('success'); toast(say('habit') + ' · +5 XP'); } else tap();
+    bumpXp(done ? 5 : -5);
     renderHabits(); renderTiles();
-    call('/habit/mark', { id: x.id, day: day, done: done }).catch(function (e) { toast(e.message, true); loadDela(); });
+    call('/habit/mark', { id: x.id, day: day, done: done }).catch(function (e) { toast(say('oops', { e: e.message }), true); loadDela(); });
   }
   function renderHabits() {
     var box = $('habitsBox');
@@ -2218,6 +2833,101 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     });
   }
 
+  // --- Gym: рекорды и график веса по каждому упражнению с «kg» ---
+  function fmtKg(n) { return String(Math.round(n * 10) / 10); }
+  var SHORT_MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function renderProg() {
+    var box = $('progBox');
+    box.hidden = view !== 'gym';
+    if (box.hidden) return;
+    box.textContent = '';
+    var h = el('div', 'panel-h');
+    h.appendChild(el('h2', '', '📈 Progress · PRs'));
+    box.appendChild(h);
+    var ex = [];
+    listsOf('gym').forEach(function (l) {
+      var rs = doneRuns(l.id).slice().reverse(); // от старых к новым
+      l.steps.filter(function (s) { return s.track; }).forEach(function (s) {
+        var pts = [];
+        rs.forEach(function (r) {
+          var x = r.steps.filter(function (y) { return y.id === s.id; })[0];
+          if (x && x.weight != null) pts.push({ t: new Date(r.finished_at).getTime(), w: x.weight, reps: x.reps });
+        });
+        if (pts.length) ex.push({ name: s.text, list: l.title, pts: pts.slice(-24) });
+      });
+    });
+    if (!ex.length) {
+      box.appendChild(el('p', 'hint', delaLoaded
+        ? 'Log weight on “kg” steps and your PRs + charts pop up here. Numbers don’t lie 📈'
+        : 'loading…'));
+      return;
+    }
+    ex.forEach(function (e) { box.appendChild(progRow(e)); });
+  }
+  function ptLabel(p) {
+    var d = new Date(p.t);
+    return SHORT_MONTHS[d.getMonth()] + ' ' + d.getDate() + ' · ' + fmtKg(p.w) + ' kg' + (p.reps != null ? ' × ' + p.reps : '');
+  }
+  function progRow(e) {
+    var pts = e.pts, ws = pts.map(function (p) { return p.w; });
+    var maxW = Math.max.apply(null, ws), first = pts[0], last = pts[pts.length - 1];
+    var orm = Math.max.apply(null, pts.map(function (p) { return p.w * (1 + (p.reps || 1) / 30); }));
+    var d = el('div', 'prog');
+    var ph = el('div', 'ph');
+    ph.appendChild(el('span', '', e.name));
+    ph.appendChild(el('b', '', '🏆 ' + fmtKg(maxW) + ' kg'));
+    d.appendChild(ph);
+    var pm = el('div', 'pm', e.list + ' · ' + pts.length + ' session' + (pts.length === 1 ? '' : 's') +
+      ' · last ' + fmtKg(last.w) + '×' + (last.reps != null ? last.reps : '—') + ' · est. 1RM ' + fmtKg(Math.round(orm * 2) / 2) + ' kg');
+    var diff = last.w - first.w;
+    if (pts.length > 1 && diff) {
+      pm.appendChild(document.createTextNode(' · '));
+      pm.appendChild(el('span', diff > 0 ? 'up' : '', (diff > 0 ? '+' : '') + fmtKg(diff) + ' kg since start' + (diff > 0 ? ' 📈' : '')));
+    }
+    d.appendChild(pm);
+    if (pts.length > 1) {
+      var tip = el('div', 'tip', 'tap a dot for details');
+      d.appendChild(progChart(pts, maxW, tip));
+      d.appendChild(tip);
+    }
+    return d;
+  }
+  // Одна серия — без легенды: название упражнения стоит над графиком. Линия 2px, точки 8px,
+  // рекорд обведён, подписи — цветом текста, а не цветом линии.
+  function progChart(pts, maxW, tip) {
+    var W = 320, H = 76, L = 4, R = 30, T = 12, B = 8;
+    var minW = Math.min.apply(null, pts.map(function (p) { return p.w; }));
+    var lo = minW === maxW ? minW - 1 : minW - (maxW - minW) * 0.15, hi = maxW;
+    var t0 = pts[0].t, t1 = pts[pts.length - 1].t;
+    var X = function (t) { return L + (t1 === t0 ? 0.5 : (t - t0) / (t1 - t0)) * (W - L - R); };
+    var Y = function (w) { return T + (1 - (w - lo) / (hi - lo)) * (H - T - B); };
+    var line = pts.map(function (p, i) { return (i ? 'L' : 'M') + X(p.t).toFixed(1) + ' ' + Y(p.w).toFixed(1); }).join(' ');
+    var prI = -1;
+    pts.forEach(function (p, i) { if (p.w === maxW && prI === -1) prI = i; });
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Weight per session, best ' + fmtKg(maxW) + ' kg">' +
+      '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + (H - B) + '" y2="' + (H - B) + '" stroke="var(--edge)" stroke-width="1"/>' +
+      '<path d="' + line + '" fill="none" stroke="var(--volt)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
+    pts.forEach(function (p, i) {
+      var cx = X(p.t).toFixed(1), cy = Y(p.w).toFixed(1);
+      if (i === prI) svg += '<circle cx="' + cx + '" cy="' + cy + '" r="7" fill="none" stroke="var(--volt)" stroke-width="1.5" opacity=".55"/>';
+      svg += '<circle cx="' + cx + '" cy="' + cy + '" r="4" fill="var(--volt)" stroke="var(--sheet, #000)" stroke-width="2"/>';
+      svg += '<circle data-i="' + i + '" cx="' + cx + '" cy="' + cy + '" r="14" fill="transparent" style="cursor:pointer"><title>' + ptLabel(p) + '</title></circle>';
+    });
+    var lp = pts[pts.length - 1];
+    svg += '<text x="' + (X(lp.t) + 8).toFixed(1) + '" y="' + (Y(lp.w) + 3).toFixed(1) + '">' + fmtKg(lp.w) + '</text>';
+    if (prI !== pts.length - 1) svg += '<text x="' + X(pts[prI].t).toFixed(1) + '" y="' + (Y(maxW) - 9).toFixed(1) + '" text-anchor="middle">PR</text>';
+    svg += '</svg>';
+    var wrap = el('div');
+    wrap.innerHTML = svg;
+    var node = wrap.firstChild;
+    node.querySelectorAll('[data-i]').forEach(function (c) {
+      var show = function () { tip.textContent = ptLabel(pts[+c.getAttribute('data-i')]) + (+c.getAttribute('data-i') === prI ? ' · 🏆 PR' : ''); };
+      c.addEventListener('click', show);
+      c.addEventListener('mouseenter', show);
+    });
+    return node;
+  }
+
   // --- прохождение ---
   function startTick() {
     if (tickTimer) return;
@@ -2247,9 +2957,9 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
       if (status === 'done') {
         var total = runTotal(j.run);
         haptic('success');
-        if (prev.length && total < Math.min.apply(null, prev)) toast('🏆 new PR: ' + dur(total) + '! old best ' + dur(Math.min.apply(null, prev)));
-        else toast('done: ' + dur(total) + (prev.length ? ' · best ' + dur(Math.min.apply(null, prev)) : ''));
-      } else toast('run ditched — won’t count in stats');
+        if (prev.length && total < Math.min.apply(null, prev)) toast(say('pr', { t: dur(total), b: dur(Math.min.apply(null, prev)) }) + ' · +25 XP');
+        else toast(say('runDone', { t: dur(total), b: prev.length ? ' · best ' + dur(Math.min.apply(null, prev)) : '' }) + ' · +25 XP');
+      } else toast('run ditched — won’t count. it’s giving quitter 😬');
       loadDela();
     }).catch(function (e) { toast(e.message, true); });
   }
@@ -2648,7 +3358,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   document.addEventListener('visibilitychange', function () {
     if (document.hidden) { clearTimeout(pollTimer); return; }
     if ($('sheet').hidden) refresh(); else schedule();
-    if ($('listSheet').hidden) loadDela();
+    if ($('listSheet').hidden && $('todoSheet').hidden) loadDela();
   });
 
   // черновик, тип записи и вкладка переживают закрытие приложения
