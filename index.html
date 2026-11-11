@@ -149,6 +149,58 @@ button { font-family: var(--mono); }
 .qcard .qa .send { margin-left: auto; padding: 9px 14px; --k: var(--warn); }
 #approveNew { --k: var(--ok); }
 
+/* Ящик / дела */
+.views { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 16px; }
+.views button { font: 500 13px var(--mono); color: var(--mute); background: none; border: 0; border-radius: 12px; padding: 10px 2px; cursor: pointer; }
+.views button[aria-selected="true"] { color: var(--ink); background: var(--tint-hi); box-shadow: inset 0 1px 0 var(--shine); }
+.views .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--pulse); margin-left: 6px; vertical-align: middle; box-shadow: 0 0 8px var(--pulse); }
+
+.panel { padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.panel-h { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.panel-h h2 { margin: 0; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--mute); font-weight: 500; }
+.mini { font: 500 12px var(--mono); color: var(--ink-2); background: var(--tint); border: 1px solid var(--edge); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.mini.go { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 50%, transparent); background: color-mix(in srgb, var(--ok) 10%, transparent); }
+.mini.danger { color: var(--pulse); border-color: color-mix(in srgb, var(--pulse) 50%, transparent); }
+
+/* Привычки */
+.hrow { display: flex; align-items: center; gap: 10px; min-height: 40px; }
+.chk { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 1.5px solid var(--edge); background: var(--tint); color: transparent; font: 700 15px var(--mono); cursor: pointer; display: grid; place-items: center; padding: 0; transition: background .15s, border-color .15s, color .15s; }
+.chk.on { color: var(--void); background: var(--ok); border-color: var(--ok); box-shadow: 0 0 calc(14px * var(--glow)) -2px var(--ok); }
+.hrow .ht { flex: 1; min-width: 0; font-size: 13.5px; overflow-wrap: anywhere; }
+.hrow .hs { font-size: 11px; color: var(--mute); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.hrow .hs b { color: var(--warn); font-weight: 500; }
+.hrow .x { flex: none; font: 500 15px var(--mono); color: var(--mute); background: none; border: 0; cursor: pointer; width: 30px; height: 30px; }
+
+/* Чек-листы */
+.lcard { padding: 13px 14px; border-radius: 18px; display: flex; flex-direction: column; gap: 8px; }
+.lcard .lt { margin: 0; font-size: 14px; font-weight: 500; overflow-wrap: anywhere; }
+.lcard .lm { margin: 0; font-size: 11.5px; color: var(--mute); font-variant-numeric: tabular-nums; }
+.lcard .la { display: flex; gap: 6px; flex-wrap: wrap; }
+.stats { font-size: 12px; line-height: 1.6; color: var(--ink-2); border-top: 1px dashed var(--edge); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+.stats .sl { color: var(--mute); font-size: 11px; display: block; }
+.stats .best { color: var(--ok); }
+.stats ol { margin: 2px 0 0; padding-left: 20px; }
+
+/* Прохождение */
+.runp { border-color: color-mix(in srgb, var(--ok) 45%, var(--edge)); }
+.timer { font: 300 40px/1.1 var(--mono); font-variant-numeric: tabular-nums; letter-spacing: .02em; color: var(--ink); text-shadow: 0 0 calc(18px * var(--glow)) color-mix(in srgb, var(--ok) 40%, transparent); }
+.runp .rsub { font-size: 12px; color: var(--mute); font-variant-numeric: tabular-nums; }
+.srow { display: flex; flex-direction: column; gap: 8px; padding: 10px 0; border-top: 1px dashed var(--edge); }
+.srow .sr { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.srow .stx { flex: 1; min-width: 0; font-size: 14px; overflow-wrap: anywhere; }
+.srow.done .stx { color: var(--mute); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--ok) 60%, transparent); }
+.srow .sd { font-size: 11px; color: var(--ok); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.srow .tw { display: flex; gap: 8px; align-items: center; padding-left: 40px; font-size: 11px; color: var(--mute); }
+.srow .tw input { width: 76px; padding: 6px 8px; }
+.rbtns { display: flex; gap: 8px; justify-content: space-between; align-items: center; margin-top: 4px; }
+.finish { margin-left: auto; }
+
+/* Редактор чек-листа */
+.stepedit { display: flex; gap: 6px; align-items: center; }
+.stepedit .inp { flex: 1; }
+.stepedit button { flex: none; font: 500 13px var(--mono); color: var(--mute); background: var(--tint); border: 1px solid var(--edge); border-radius: 10px; cursor: pointer; height: 38px; min-width: 34px; padding: 0 8px; }
+.stepedit button.on { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 50%, transparent); }
+
 /* Поле записи */
 .compose { padding: 14px; display: flex; flex-direction: column; gap: 12px; --k: var(--neon); transition: border-color .3s; }
 .compose[data-kind="task"] { --k: var(--pulse); }
@@ -361,6 +413,17 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
 
   <section class="stack" id="questions" hidden aria-label="Вопросы от Claude"></section>
 
+  <nav class="views glass" id="views" role="tablist" aria-label="Раздел">
+    <button type="button" role="tab" aria-selected="true" data-view="inbox">ящик</button>
+    <button type="button" role="tab" aria-selected="false" data-view="dela">дела<span class="dot" id="runDot" hidden></span></button>
+  </nav>
+
+  <div class="stack" id="v-dela" hidden>
+    <section class="glass panel runp" id="runPanel" hidden aria-label="Прохождение чек-листа"></section>
+    <section class="glass panel" id="habitsBox" aria-label="Привычки"></section>
+    <section class="stack" id="listsBox" aria-label="Чек-листы"></section>
+  </div>
+
   <section class="glass gate" id="gate" hidden>
     <h1>Открой через Telegram</h1>
     <p>Mobile Jarvis работает только внутри Telegram: так он узнаёт, что это ты.</p>
@@ -491,6 +554,19 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
             <span>Когда</span>
             <span class="addrow"><select class="inp" id="reviewDay" aria-label="День разбора"></select><select class="inp" id="reviewHour" aria-label="Час разбора"></select></span>
           </div>
+          <div class="setrow">
+            <span id="eveLabel">Итог дня и привычки</span>
+            <button type="button" class="switch" id="eveOn" role="switch" aria-checked="true" aria-labelledby="eveLabel"></button>
+          </div>
+          <div class="setrow" id="eveMore"><span>Во сколько</span><select class="inp" id="eveHour" aria-label="Час итога дня"></select></div>
+          <div class="setrow">
+            <span id="lrLabel">Совет Claude по чек-листам</span>
+            <button type="button" class="switch" id="lrOn" role="switch" aria-checked="true" aria-labelledby="lrLabel"></button>
+          </div>
+          <div class="setrow" id="lrMore">
+            <span>Когда</span>
+            <span class="addrow"><select class="inp" id="lrDay" aria-label="День совета"></select><select class="inp" id="lrHour" aria-label="Час совета"></select></span>
+          </div>
           <div class="stack" id="schedList" style="gap:6px"></div>
           <div class="stack" id="schedForm" style="gap:8px" hidden>
             <textarea class="inp" id="schedText" rows="2" placeholder="например: выжимка новостей туризма Кыргызстана" aria-label="Что сделать"></textarea>
@@ -504,6 +580,44 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
           <button type="button" class="chip ghost" id="schedOpen" style="align-self:flex-start">+ задача по расписанию</button>
           <p class="hint">В это время облако положит задачу с ✓ и позовёт Mac. Если Mac спит, сделает, когда проснётся. Время — по городу утренней сводки. Каждый запуск тратит лимиты Claude.</p>
         </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div class="sheet" id="listSheet" hidden role="dialog" aria-modal="true" aria-labelledby="listSheetTitle">
+  <div class="sheet-panel">
+    <div class="sheet-head">
+      <h2 id="listSheetTitle">Чек-лист</h2>
+      <button type="button" class="done-btn" id="listSave">готово</button>
+    </div>
+    <div class="sheet-body">
+      <section>
+        <h3>Название</h3>
+        <input class="inp" id="leTitle" placeholder="например: Зал — ноги" aria-label="Название чек-листа" enterkeyhint="done">
+      </section>
+      <section>
+        <h3>Шаги</h3>
+        <div class="stack" id="leSteps" style="gap:8px"></div>
+        <button type="button" class="chip ghost" id="leAddStep" style="margin-top:8px">+ шаг</button>
+        <p class="hint" style="margin-top:8px">«кг» у шага — записывать вес и повторы (для зала). Отмечать шаги можно в любом порядке.</p>
+      </section>
+      <section>
+        <h3>Напоминание</h3>
+        <div class="box">
+          <div class="setrow">
+            <span id="leRemLabel">Бот напомнит начать</span>
+            <button type="button" class="switch" id="leRemOn" role="switch" aria-checked="false" aria-labelledby="leRemLabel"></button>
+          </div>
+          <div class="stack" id="leRemMore" style="gap:10px" hidden>
+            <div class="chips" id="leRemDays" aria-label="Дни"></div>
+            <div class="setrow"><span>Во сколько</span><span class="addrow"><select class="inp" id="leRemHour" aria-label="Час"></select><select class="inp" id="leRemMin" aria-label="Минуты"></select></span></div>
+          </div>
+        </div>
+      </section>
+      <section id="leDanger" hidden>
+        <button type="button" class="mini danger" id="leDelete">удалить чек-лист</button>
+        <p class="hint" style="margin-top:8px">Статистика прошлых прохождений сохранится в облаке.</p>
       </section>
     </div>
   </div>
@@ -572,6 +686,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   if (!initData) {
     $('gate').hidden = false;
     $('main').hidden = true;
+    $('views').hidden = true;
     $('openSettings').hidden = true;
     $('refresh').hidden = true;
     $('led').classList.add('off');
@@ -1207,6 +1322,13 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     $('tplOpen').textContent = addingTpl ? 'отмена' : '+ кнопка';
 
     // по расписанию
+    $('eveOn').setAttribute('aria-checked', draft.evening.on ? 'true' : 'false');
+    $('eveMore').hidden = !draft.evening.on;
+    $('eveHour').value = String(draft.evening.hour);
+    $('lrOn').setAttribute('aria-checked', draft.list_review.on ? 'true' : 'false');
+    $('lrMore').hidden = !draft.list_review.on;
+    $('lrDay').value = String(draft.list_review.day);
+    $('lrHour').value = String(draft.list_review.hour);
     var rv = draft.idea_review;
     $('reviewOn').setAttribute('aria-checked', rv.on ? 'true' : 'false');
     $('reviewMore').hidden = !rv.on;
@@ -1247,6 +1369,8 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     draft.templates = draft.templates || [];
     draft.schedules = draft.schedules || [];
     draft.idea_review = draft.idea_review || { on: true, day: 7, hour: 10 };
+    draft.evening = draft.evening || { on: true, hour: 21 };
+    draft.list_review = draft.list_review || { on: true, day: 7, hour: 11 };
     addingCity = addingProj = addingTpl = addingSched = false;
     $('citySearch').value = ''; $('cityResults').textContent = '';
     setSaveState('сохраняются сами');
@@ -1264,14 +1388,26 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   }
 
   (function initHours() {
-    ['digestHour', 'reviewHour'].forEach(function (id) {
+    ['digestHour', 'reviewHour', 'eveHour', 'lrHour'].forEach(function (id) {
       for (var h = 0; h < 24; h++) $(id).appendChild(new Option(pad(h) + ':00', String(h)));
     });
-    for (var h = 0; h < 24; h++) $('schedHour').appendChild(new Option(pad(h), String(h)));
-    [0, 15, 30, 45].forEach(function (m) { $('schedMin').appendChild(new Option(':' + pad(m), String(m))); });
-    for (var d = 1; d <= 7; d++) $('reviewDay').appendChild(new Option(DAYS[d], String(d)));
+    ['schedHour', 'leRemHour'].forEach(function (id) {
+      for (var h = 0; h < 24; h++) $(id).appendChild(new Option(pad(h), String(h)));
+    });
+    ['schedMin', 'leRemMin'].forEach(function (id) {
+      [0, 15, 30, 45].forEach(function (m) { $(id).appendChild(new Option(':' + pad(m), String(m))); });
+    });
+    ['reviewDay', 'lrDay'].forEach(function (id) {
+      for (var d = 1; d <= 7; d++) $(id).appendChild(new Option(DAYS[d], String(d)));
+    });
     $('schedHour').value = '9';
   })();
+
+  $('eveOn').addEventListener('click', function () { draft.evening.on = !draft.evening.on; tap(); changed(); });
+  $('eveHour').addEventListener('change', function () { draft.evening.hour = +$('eveHour').value; changed(); });
+  $('lrOn').addEventListener('click', function () { draft.list_review.on = !draft.list_review.on; tap(); changed(); });
+  $('lrDay').addEventListener('change', function () { draft.list_review.day = +$('lrDay').value; changed(); });
+  $('lrHour').addEventListener('change', function () { draft.list_review.hour = +$('lrHour').value; changed(); });
 
   $('reviewOn').addEventListener('click', function () { draft.idea_review.on = !draft.idea_review.on; tap(); changed(); });
   $('reviewDay').addEventListener('change', function () { draft.idea_review.day = +$('reviewDay').value; changed(); });
@@ -1297,7 +1433,10 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   $('openSettings').addEventListener('click', openSheet);
   $('closeSettings').addEventListener('click', closeSheet);
   $('sheet').addEventListener('click', function (e) { if (e.target === $('sheet')) closeSheet(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (!$('listSheet').hidden) closeListEditor(); else closeSheet();
+  });
   $('digestOn').addEventListener('click', function () { draft.digest_on = !draft.digest_on; tap(); changed(); });
   $('digestHour').addEventListener('change', function () { draft.digest_hour = +$('digestHour').value; changed(); });
   $('citySuggest').addEventListener('click', function () { addCity(phoneTz()); });
@@ -1341,6 +1480,504 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   $('tplAdd').addEventListener('click', addTemplate);
   $('tplLabel').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); addTemplate(); } });
 
+  // ---------- дела: привычки и чек-листы ----------
+  var dela = { lists: [], runs: [], habits: [], marks: [] }, delaLoaded = false;
+  var view = 'inbox', run = null, runSaveTimer = null, tickTimer = null;
+  var habitEdit = false, addingHabit = false, openStats = {};
+  var edit = null;
+
+  function localDay(d) { d = d || new Date(); return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function dayShift(s, n) { var p = s.split('-'); return localDay(new Date(+p[0], +p[1] - 1, +p[2] + n)); }
+  function dur(ms) {
+    var t = Math.max(0, Math.round(ms / 1000)), h = Math.floor(t / 3600), m = Math.floor(t % 3600 / 60), s = t % 60;
+    return h ? h + ':' + pad(m) + ':' + pad(s) : m + ':' + pad(s);
+  }
+  function avg(a) { return a.reduce(function (x, y) { return x + y; }, 0) / a.length; }
+  function newId() { return ('s' + Math.random().toString(36).slice(2) + '0000').slice(0, 9); }
+  function num(v) { v = String(v == null ? '' : v).replace(',', '.').trim(); var n = parseFloat(v); return v && isFinite(n) && n >= 0 ? n : null; }
+  function listById(id) { return dela.lists.filter(function (l) { return l.id === id; })[0]; }
+  function daysLabel(r) { return r.days.map(function (d) { return DAYS[d]; }).join(', ') + ' ' + pad(r.hour) + ':' + pad(r.minute); }
+
+  function selectView(v) {
+    view = v === 'dela' ? 'dela' : 'inbox';
+    store('mj-view', view);
+    document.querySelectorAll('#views [data-view]').forEach(function (b) {
+      b.setAttribute('aria-selected', b.dataset.view === view ? 'true' : 'false');
+    });
+    $('main').hidden = view !== 'inbox';
+    $('v-dela').hidden = view !== 'dela';
+    if (view === 'dela') { renderDela(); loadDela(); } else stopTick();
+  }
+
+  function loadDela() {
+    return call('/dela').then(function (j) {
+      dela = { lists: j.lists || [], runs: j.runs || [], habits: j.habits || [], marks: j.marks || [] };
+      delaLoaded = true;
+      var act = dela.runs.filter(function (r) { return r.status === 'active'; })[0] || null;
+      // своё незаконченное прохождение не затираем ответом облака
+      if (act && !(run && run.id === act.id)) run = act;
+      if (!act && run && !runSaveTimer) run = null;
+      renderDela();
+    }).catch(function (e) { toast('дела не загрузились: ' + e.message, true); });
+  }
+
+  function renderDela() {
+    $('runDot').hidden = !run;
+    if (view !== 'dela') return;
+    renderRun(); renderHabits(); renderLists();
+  }
+
+  // --- привычки ---
+  function marksOf(id) {
+    var s = {};
+    dela.marks.forEach(function (m) { if (m.habit_id === id) s[m.day] = true; });
+    return s;
+  }
+  function streak(set) {
+    var d = localDay(), n = 0;
+    if (!set[d]) d = dayShift(d, -1);
+    while (set[d]) { n++; d = dayShift(d, -1); }
+    return n;
+  }
+  function weekCount(set) {
+    var d = localDay(), n = 0;
+    for (var i = 0; i < 7; i++) { if (set[d]) n++; d = dayShift(d, -1); }
+    return n;
+  }
+  function markHabit(x, done) {
+    var day = localDay();
+    if (done) dela.marks.push({ habit_id: x.id, day: day });
+    else dela.marks = dela.marks.filter(function (m) { return !(m.habit_id === x.id && m.day === day); });
+    if (done) haptic('success'); else tap();
+    renderHabits();
+    call('/habit/mark', { id: x.id, day: day, done: done }).catch(function (e) { toast(e.message, true); loadDela(); });
+  }
+  function renderHabits() {
+    var box = $('habitsBox');
+    box.textContent = '';
+    var h = el('div', 'panel-h');
+    h.appendChild(el('h2', '', 'Привычки · сегодня'));
+    if (dela.habits.length) h.appendChild(btn('mini', habitEdit ? 'готово' : 'изменить', function () { habitEdit = !habitEdit; renderHabits(); }));
+    box.appendChild(h);
+    var today = localDay();
+    dela.habits.forEach(function (x) {
+      var set = marksOf(x.id), on = !!set[today];
+      var row = el('div', 'hrow');
+      var c = btn('chk' + (on ? ' on' : ''), '✓', function () { markHabit(x, !on); });
+      c.setAttribute('aria-pressed', on ? 'true' : 'false');
+      c.setAttribute('aria-label', x.title + (on ? ': сделано' : ': не сделано'));
+      row.appendChild(c);
+      row.appendChild(el('span', 'ht', x.title));
+      var hs = el('span', 'hs'), st = streak(set);
+      if (st) { hs.appendChild(el('b', '', '🔥' + st)); hs.appendChild(document.createTextNode(' · ')); }
+      hs.appendChild(document.createTextNode(weekCount(set) + '/7'));
+      row.appendChild(hs);
+      if (habitEdit) {
+        var del = btn('x', '×'), armed = false;
+        del.setAttribute('aria-label', 'Удалить привычку ' + x.title);
+        del.addEventListener('click', function () {
+          if (!armed) { armed = true; del.textContent = '?'; toast('нажми ещё раз, чтобы удалить «' + x.title + '»'); setTimeout(function () { armed = false; del.textContent = '×'; }, 3000); return; }
+          call('/habit/delete', { id: x.id }).then(function () { tap(); loadDela(); }).catch(function (e) { toast(e.message, true); });
+        });
+        row.appendChild(del);
+      }
+      box.appendChild(row);
+    });
+    if (!dela.habits.length && !addingHabit) {
+      box.appendChild(el('p', 'hint', delaLoaded
+        ? 'То, что хочешь делать каждый день: спорт, чтение, английский. Отмечай галочкой, серия дней считается сама, вечером бот спросит, что сделал.'
+        : 'загружаю…'));
+    }
+    if (addingHabit) {
+      var r = el('div', 'addrow');
+      var inp = el('input', 'inp');
+      inp.placeholder = 'например: 20 минут английского'; inp.setAttribute('aria-label', 'Новая привычка'); inp.enterKeyHint = 'done';
+      var add = function () {
+        var t = inp.value.trim();
+        if (!t) { inp.focus(); return; }
+        call('/habit/save', { title: t }).then(function () { addingHabit = false; haptic('success'); loadDela(); }).catch(function (e) { toast(e.message, true); });
+      };
+      inp.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); add(); } });
+      r.appendChild(inp);
+      r.appendChild(btn('chip on', 'добавить', add));
+      box.appendChild(r);
+      box.appendChild(btn('chip ghost', 'отмена', function () { addingHabit = false; renderHabits(); }));
+      setTimeout(function () { inp.focus(); }, 0);
+    } else {
+      var plus = btn('chip ghost', '+ привычка', function () { addingHabit = true; renderHabits(); });
+      plus.style.alignSelf = 'flex-start';
+      box.appendChild(plus);
+    }
+  }
+
+  // --- статистика чек-листа ---
+  function doneRuns(listId) {
+    return dela.runs.filter(function (r) { return r.list_id === listId && r.status === 'done' && r.finished_at; });
+  }
+  function runTotal(r) { return new Date(r.finished_at).getTime() - new Date(r.started_at).getTime(); }
+  // длительность шага — от предыдущей отметки (или старта) до своей
+  function stepDurs(r) {
+    var prev = new Date(r.started_at).getTime();
+    return r.steps.filter(function (s) { return s.done_at; })
+      .sort(function (a, b) { return new Date(a.done_at) - new Date(b.done_at); })
+      .map(function (s) { var t = new Date(s.done_at).getTime(), o = { id: s.id, ms: Math.max(0, t - prev) }; prev = t; return o; });
+  }
+  function lastValues(listId) {
+    var out = {};
+    doneRuns(listId).forEach(function (r) { // от новых к старым
+      r.steps.forEach(function (s) { if (s.track && !out[s.id] && (s.weight != null || s.reps != null)) out[s.id] = { weight: s.weight, reps: s.reps }; });
+    });
+    return out;
+  }
+  function partOfDay(iso) { var h = new Date(iso).getHours(); return h < 5 ? 'ночью' : h < 12 ? 'утром' : h < 17 ? 'днём' : 'вечером'; }
+
+  function statsBlock(l, rs) {
+    var box = el('div', 'stats');
+    var totals = rs.map(runTotal), best = Math.min.apply(null, totals);
+    var top = el('div');
+    top.appendChild(document.createTextNode('лучшее '));
+    top.appendChild(el('b', 'best', dur(best)));
+    top.appendChild(document.createTextNode(' · среднее ' + dur(avg(totals)) + ' · последнее ' + dur(totals[0]) + ' · всего ' + rs.length));
+    box.appendChild(top);
+
+    var parts = {};
+    rs.forEach(function (r) { var k = partOfDay(r.started_at); (parts[k] = parts[k] || []).push(runTotal(r)); });
+    var pk = Object.keys(parts);
+    if (pk.length > 1) {
+      pk.sort(function (a, b) { return avg(parts[a]) - avg(parts[b]); });
+      var d = el('div');
+      d.appendChild(el('span', 'sl', 'когда ты быстрее'));
+      d.appendChild(document.createTextNode(pk.map(function (k) { return k + ' ' + dur(avg(parts[k])) + ' (' + parts[k].length + ')'; }).join(' · ')));
+      box.appendChild(d);
+    }
+
+    var per = {};
+    rs.forEach(function (r) { stepDurs(r).forEach(function (x) { (per[x.id] = per[x.id] || []).push(x.ms); }); });
+    var steps = l.steps.filter(function (s) { return per[s.id]; })
+      .sort(function (a, b) { return avg(per[b.id]) - avg(per[a.id]); });
+    if (steps.length) {
+      var sd = el('div');
+      sd.appendChild(el('span', 'sl', 'шаги, дольше всего сверху'));
+      steps.forEach(function (s) {
+        sd.appendChild(el('div', '', '• ' + s.text + ' — ' + dur(avg(per[s.id])) + ' в среднем, лучшее ' + dur(Math.min.apply(null, per[s.id]))));
+      });
+      box.appendChild(sd);
+    }
+
+    // лучший порядок: только полные прохождения, если порядок хоть раз менялся
+    var groups = {};
+    rs.forEach(function (r) {
+      if (r.steps.some(function (s) { return !s.done_at; })) return;
+      var key = stepDurs(r).map(function (x) { return x.id; }).join('>');
+      (groups[key] = groups[key] || []).push(runTotal(r));
+    });
+    var gk = Object.keys(groups);
+    if (gk.length > 1) {
+      gk.sort(function (a, b) { return avg(groups[a]) - avg(groups[b]); });
+      var others = [];
+      gk.slice(1).forEach(function (k) { others = others.concat(groups[k]); });
+      var od = el('div');
+      od.appendChild(el('span', 'sl', 'быстрее всего в таком порядке: ' + dur(avg(groups[gk[0]])) + ' против ' + dur(avg(others))));
+      var ol = el('ol');
+      gk[0].split('>').forEach(function (id) {
+        var s = l.steps.filter(function (x) { return x.id === id; })[0];
+        ol.appendChild(el('li', '', s ? s.text : 'шаг удалён'));
+      });
+      od.appendChild(ol);
+      box.appendChild(od);
+    }
+
+    var tracked = l.steps.filter(function (s) { return s.track; });
+    var wl = [];
+    tracked.forEach(function (s) {
+      var series = [];
+      rs.slice().reverse().forEach(function (r) {
+        var x = r.steps.filter(function (y) { return y.id === s.id; })[0];
+        if (x && (x.weight != null || x.reps != null)) series.push(x);
+      });
+      if (!series.length) return;
+      var f = function (x) { return (x.weight != null ? x.weight : '—') + '×' + (x.reps != null ? x.reps : '—'); };
+      var maxW = Math.max.apply(null, series.map(function (x) { return x.weight || 0; }));
+      wl.push('• ' + s.text + ': ' + f(series[0]) + (series.length > 1 ? ' → ' + f(series[series.length - 1]) : '') + (maxW ? ', максимум ' + maxW + ' кг' : ''));
+    });
+    if (wl.length) {
+      var wd = el('div');
+      wd.appendChild(el('span', 'sl', 'вес × повторы: первый раз → последний'));
+      wl.forEach(function (t) { wd.appendChild(el('div', '', t)); });
+      box.appendChild(wd);
+    }
+    return box;
+  }
+
+  function renderLists() {
+    var box = $('listsBox');
+    box.textContent = '';
+    var head = el('div', 'glass panel');
+    var h = el('div', 'panel-h');
+    h.appendChild(el('h2', '', 'Чек-листы'));
+    h.appendChild(btn('mini', '+ чек-лист', function () { openListEditor(null); }));
+    head.appendChild(h);
+    if (!dela.lists.length) {
+      head.appendChild(el('p', 'hint', delaLoaded
+        ? 'Список шагов для работы, зала или любого дела. Жмёшь «начать», отмечаешь шаги, а время, лучший порядок и рост веса считаются сами.'
+        : 'загружаю…'));
+    }
+    box.appendChild(head);
+    dela.lists.forEach(function (l) {
+      var rs = doneRuns(l.id);
+      var c = el('div', 'lcard glass');
+      c.appendChild(el('p', 'lt', l.title));
+      var meta = l.steps.length + ' ' + (l.steps.length === 1 ? 'шаг' : l.steps.length < 5 ? 'шага' : 'шагов');
+      if (rs.length) {
+        var totals = rs.map(runTotal);
+        meta += ' · ' + rs.length + ' раз · лучшее ' + dur(Math.min.apply(null, totals)) + ' · среднее ' + dur(avg(totals));
+      } else meta += ' · ещё не проходил';
+      if (l.remind) meta += ' · ⏰ ' + daysLabel(l.remind);
+      c.appendChild(el('p', 'lm', meta));
+      var a = el('div', 'la');
+      var mine = run && run.list_id === l.id;
+      var go = btn('mini go', mine ? '▶ продолжить' : '▶ начать', function () {
+        if (run && !mine) { toast('сначала закончи «' + ((listById(run.list_id) || {}).title || 'чек-лист') + '»', true); return; }
+        if (mine) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+        go.disabled = true;
+        call('/run/start', { list_id: l.id }).then(function (j) {
+          run = j.run; haptic('success'); renderDela();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }).catch(function (e) { go.disabled = false; toast(e.message, true); });
+      });
+      a.appendChild(go);
+      if (rs.length) a.appendChild(btn('mini', openStats[l.id] ? 'скрыть' : 'статистика', function () { openStats[l.id] = !openStats[l.id]; renderLists(); }));
+      a.appendChild(btn('mini', 'изменить', function () { openListEditor(l); }));
+      c.appendChild(a);
+      if (openStats[l.id] && rs.length) c.appendChild(statsBlock(l, rs));
+      box.appendChild(c);
+    });
+  }
+
+  // --- прохождение ---
+  function startTick() {
+    if (tickTimer) return;
+    tickTimer = setInterval(function () {
+      var t = $('runTimer');
+      if (t && run) t.textContent = dur(Date.now() - new Date(run.started_at).getTime());
+    }, 1000);
+  }
+  function stopTick() { clearInterval(tickTimer); tickTimer = null; }
+
+  function saveRun() {
+    clearTimeout(runSaveTimer);
+    runSaveTimer = setTimeout(function () {
+      var r = run;
+      call('/run/update', { id: r.id, steps: r.steps, status: 'active' })
+        .catch(function (e) { toast('отметка не сохранилась: ' + e.message, true); })
+        .then(function () { runSaveTimer = null; });
+    }, 400);
+  }
+
+  function finishRun(status) {
+    clearTimeout(runSaveTimer); runSaveTimer = null;
+    var r = run, prev = doneRuns(r.list_id).map(runTotal);
+    call('/run/update', { id: r.id, steps: r.steps, status: status }).then(function (j) {
+      run = null;
+      if (status === 'done') {
+        var total = runTotal(j.run);
+        haptic('success');
+        if (prev.length && total < Math.min.apply(null, prev)) toast('🏆 рекорд: ' + dur(total) + '! прошлое лучшее ' + dur(Math.min.apply(null, prev)));
+        else toast('готово: ' + dur(total) + (prev.length ? ' · лучшее ' + dur(Math.min.apply(null, prev)) : ''));
+      } else toast('прохождение брошено, в статистику не попадёт');
+      loadDela();
+    }).catch(function (e) { toast(e.message, true); });
+  }
+
+  function renderRun() {
+    var p = $('runPanel');
+    $('runDot').hidden = !run;
+    if (!run) { p.hidden = true; stopTick(); return; }
+    p.hidden = false;
+    p.textContent = '';
+    var l = listById(run.list_id);
+    var h = el('div', 'panel-h');
+    h.appendChild(el('h2', '', 'идёт: ' + (l ? l.title : 'чек-лист')));
+    p.appendChild(h);
+    var t = el('div', 'timer', dur(Date.now() - new Date(run.started_at).getTime()));
+    t.id = 'runTimer';
+    p.appendChild(t);
+    var done = run.steps.filter(function (s) { return s.done_at; }).length;
+    var prev = doneRuns(run.list_id).map(runTotal);
+    p.appendChild(el('div', 'rsub', done + ' из ' + run.steps.length + (prev.length ? ' · лучшее ' + dur(Math.min.apply(null, prev)) : '')));
+
+    var durs = {};
+    stepDurs(run).forEach(function (x) { durs[x.id] = x.ms; });
+    var last = lastValues(run.list_id);
+    run.steps.forEach(function (s) {
+      var row = el('div', 'srow' + (s.done_at ? ' done' : ''));
+      var sr = el('div', 'sr');
+      sr.setAttribute('role', 'button');
+      sr.tabIndex = 0;
+      var c = el('span', 'chk' + (s.done_at ? ' on' : ''), '✓');
+      sr.appendChild(c);
+      sr.appendChild(el('span', 'stx', s.text));
+      if (s.done_at) sr.appendChild(el('span', 'sd', '+' + dur(durs[s.id] || 0)));
+      var wIn, rIn;
+      var toggle = function () {
+        s.done_at = s.done_at ? null : new Date().toISOString();
+        if (s.done_at && s.track) {
+          var lv = last[s.id] || {};
+          s.weight = num(wIn.value) != null ? num(wIn.value) : (lv.weight != null ? lv.weight : null);
+          s.reps = num(rIn.value) != null ? num(rIn.value) : (lv.reps != null ? lv.reps : null);
+        }
+        if (s.done_at) haptic('success'); else tap();
+        var all = run.steps.every(function (x) { return x.done_at; });
+        renderRun(); saveRun();
+        if (all) toast('все шаги ✓ — жми «закончить»');
+      };
+      sr.addEventListener('click', toggle);
+      sr.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+      row.appendChild(sr);
+      if (s.track) {
+        var lv = last[s.id] || {};
+        var tw = el('div', 'tw');
+        wIn = el('input', 'inp'); wIn.inputMode = 'decimal'; wIn.setAttribute('aria-label', 'Вес, кг для ' + s.text);
+        wIn.placeholder = lv.weight != null ? lv.weight + ' кг' : 'кг';
+        if (s.weight != null) wIn.value = s.weight;
+        rIn = el('input', 'inp'); rIn.inputMode = 'numeric'; rIn.setAttribute('aria-label', 'Повторы для ' + s.text);
+        rIn.placeholder = lv.reps != null ? lv.reps + ' раз' : 'раз';
+        if (s.reps != null) rIn.value = s.reps;
+        var upd = function () { s.weight = num(wIn.value); s.reps = num(rIn.value); saveRun(); };
+        wIn.addEventListener('change', upd); rIn.addEventListener('change', upd);
+        tw.appendChild(wIn); tw.appendChild(el('span', '', '×')); tw.appendChild(rIn);
+        if (lv.weight != null || lv.reps != null) tw.appendChild(el('span', '', 'прошлый раз ' + (lv.weight != null ? lv.weight : '—') + '×' + (lv.reps != null ? lv.reps : '—')));
+        row.appendChild(tw);
+      }
+      p.appendChild(row);
+    });
+
+    var b = el('div', 'rbtns');
+    var drop = btn('mini', 'бросить'), armed = false;
+    drop.addEventListener('click', function () {
+      if (!armed) { armed = true; drop.textContent = 'точно бросить?'; drop.classList.add('danger'); setTimeout(function () { armed = false; drop.textContent = 'бросить'; drop.classList.remove('danger'); }, 3000); return; }
+      finishRun('abandoned');
+    });
+    b.appendChild(drop);
+    var allDone = run.steps.every(function (x) { return x.done_at; });
+    var fin = btn((allDone ? 'send' : 'mini') + ' finish', 'закончить ✓', function () {
+      if (!run.steps.some(function (x) { return x.done_at; })) { toast('отметь хотя бы один шаг'); return; }
+      finishRun('done');
+    });
+    if (allDone) fin.style.setProperty('--k', 'var(--ok)');
+    b.appendChild(fin);
+    p.appendChild(b);
+    startTick();
+  }
+
+  // --- редактор чек-листа ---
+  function onListBack() { closeListEditor(); }
+  function openListEditor(l) {
+    edit = l
+      ? { id: l.id, title: l.title, steps: clone(l.steps), remind: l.remind ? clone(l.remind) : null }
+      : { title: '', steps: [{ id: newId(), text: '', track: false }], remind: null };
+    $('leTitle').value = edit.title;
+    renderEditor();
+    $('listSheet').hidden = false;
+    document.body.classList.add('locked');
+    try { tg.BackButton.onClick(onListBack); tg.BackButton.show(); } catch (e) {}
+    if (!l) setTimeout(function () { $('leTitle').focus(); }, 50);
+  }
+  function hideListSheet() {
+    $('listSheet').hidden = true;
+    document.body.classList.remove('locked');
+    try { tg.BackButton.offClick(onListBack); tg.BackButton.hide(); } catch (e) {}
+    edit = null;
+  }
+  function renderEditor() {
+    var box = $('leSteps');
+    box.textContent = '';
+    edit.steps.forEach(function (s, i) {
+      var r = el('div', 'stepedit');
+      var inp = el('input', 'inp');
+      inp.value = s.text; inp.placeholder = 'шаг ' + (i + 1); inp.setAttribute('aria-label', 'Шаг ' + (i + 1)); inp.enterKeyHint = 'next';
+      inp.addEventListener('input', function () { s.text = inp.value; });
+      inp.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') { e.preventDefault(); if (i === edit.steps.length - 1) addStep(); else box.querySelectorAll('input')[i + 1].focus(); }
+      });
+      r.appendChild(inp);
+      var kg = btn(s.track ? 'on' : '', 'кг', function () { s.track = !s.track; tap(); renderEditor(); });
+      kg.setAttribute('aria-pressed', s.track ? 'true' : 'false');
+      kg.setAttribute('aria-label', 'Записывать вес и повторы');
+      r.appendChild(kg);
+      if (i > 0) {
+        var up = btn('', '↑', function () { edit.steps.splice(i - 1, 0, edit.steps.splice(i, 1)[0]); tap(); renderEditor(); });
+        up.setAttribute('aria-label', 'Выше');
+        r.appendChild(up);
+      }
+      var x = btn('', '×', function () { edit.steps.splice(i, 1); if (!edit.steps.length) edit.steps.push({ id: newId(), text: '', track: false }); renderEditor(); });
+      x.setAttribute('aria-label', 'Убрать шаг');
+      r.appendChild(x);
+      box.appendChild(r);
+    });
+    var rem = edit.remind;
+    $('leRemOn').setAttribute('aria-checked', rem ? 'true' : 'false');
+    $('leRemMore').hidden = !rem;
+    if (rem) {
+      var dbox = $('leRemDays');
+      dbox.textContent = '';
+      for (var d = 1; d <= 7; d++) (function (day) {
+        var b = btn('chip', DAYS[day], function () {
+          var k = rem.days.indexOf(day);
+          if (k === -1) rem.days.push(day); else rem.days.splice(k, 1);
+          rem.days.sort(); tap(); renderEditor();
+        });
+        b.setAttribute('aria-pressed', rem.days.indexOf(day) !== -1 ? 'true' : 'false');
+        dbox.appendChild(b);
+      })(d);
+      $('leRemHour').value = String(rem.hour);
+      $('leRemMin').value = String(rem.minute);
+    }
+    $('leDanger').hidden = !edit.id;
+  }
+  function addStep() {
+    edit.steps.push({ id: newId(), text: '', track: false });
+    renderEditor();
+    var all = $('leSteps').querySelectorAll('input');
+    all[all.length - 1].focus();
+  }
+  function closeListEditor() {
+    if (!edit) return;
+    edit.title = $('leTitle').value.trim();
+    var steps = edit.steps.filter(function (s) { return s.text.trim(); });
+    if (!edit.id && !edit.title && !steps.length) { hideListSheet(); return; } // пустой новый — просто закрыть
+    if (!edit.title) { $('leTitle').focus(); toast('напиши название'); return; }
+    if (!steps.length) { toast('добавь хотя бы один шаг'); return; }
+    if (edit.remind && !edit.remind.days.length) edit.remind = null;
+    var body = { id: edit.id, title: edit.title, steps: steps, remind: edit.remind };
+    $('listSave').disabled = true;
+    call('/list/save', { list: body }).then(function () {
+      haptic('success'); toast('чек-лист сохранён');
+      hideListSheet(); loadDela();
+    }).catch(function (e) { toast(e.message, true); })
+      .then(function () { $('listSave').disabled = false; });
+  }
+  $('listSave').addEventListener('click', closeListEditor);
+  $('listSheet').addEventListener('click', function (e) { if (e.target === $('listSheet')) closeListEditor(); });
+  $('leAddStep').addEventListener('click', addStep);
+  $('leRemOn').addEventListener('click', function () {
+    edit.remind = edit.remind ? null : { days: [1, 3, 5], hour: 19, minute: 0 };
+    tap(); renderEditor();
+  });
+  $('leRemHour').addEventListener('change', function () { if (edit.remind) edit.remind.hour = +$('leRemHour').value; });
+  $('leRemMin').addEventListener('change', function () { if (edit.remind) edit.remind.minute = +$('leRemMin').value; });
+  (function () {
+    var armed = false;
+    $('leDelete').addEventListener('click', function () {
+      if (!armed) { armed = true; $('leDelete').textContent = 'нажми ещё раз, чтобы удалить'; setTimeout(function () { armed = false; $('leDelete').textContent = 'удалить чек-лист'; }, 3000); return; }
+      call('/list/delete', { id: edit.id }).then(function () { toast('чек-лист удалён'); hideListSheet(); loadDela(); })
+        .catch(function (e) { toast(e.message, true); });
+    });
+  })();
+  document.querySelectorAll('#views [data-view]').forEach(function (b) {
+    b.addEventListener('click', function () { tap(); selectView(b.dataset.view); });
+  });
+
   // ---------- события ----------
   document.querySelectorAll('.seg [data-kind]').forEach(function (b) {
     b.addEventListener('click', function () { setKind(b.dataset.kind); tap(); });
@@ -1383,7 +2020,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); send(); }
   });
   $('send').addEventListener('click', send);
-  $('refresh').addEventListener('click', function () { refresh(); });
+  $('refresh').addEventListener('click', function () { refresh(); if (view === 'dela') loadDela(); });
   $('run').addEventListener('click', runMac);
   $('approveNew').addEventListener('click', function () {
     approveNew = !approveNew;
@@ -1394,6 +2031,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   document.addEventListener('visibilitychange', function () {
     if (document.hidden) { clearTimeout(pollTimer); return; }
     if ($('sheet').hidden) refresh(); else schedule();
+    if (view === 'dela' && $('listSheet').hidden) loadDela();
   });
 
   // черновик, тип записи и вкладка переживают закрытие приложения
@@ -1408,6 +2046,8 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   renderComposeChips();
   render();
   refresh();
+  selectView(load('mj-view') || 'inbox');
+  if (view !== 'dela') loadDela(); // чтобы точка «идёт чек-лист» была видна и из ящика
 })();
 </script>
 </body>
