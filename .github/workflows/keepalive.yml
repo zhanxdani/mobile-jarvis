@@ -1,0 +1,24 @@
+name: keepalive
+
+# Бесплатный проект Supabase засыпает после недели без запросов.
+# Раз в 6 дней (1, 7, 13, 19, 25 и 31 числа) обращаемся к базе через функцию /ping.
+on:
+  schedule:
+    - cron: "17 6 */6 * *"
+  workflow_dispatch:
+
+permissions:
+  actions: write
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Обратиться к базе
+        run: curl -fsS --retry 3 --retry-delay 20 "https://egdppxypwznuesgwpyor.supabase.co/functions/v1/mj/ping"
+
+      - name: Не дать GitHub отключить расписание
+        # В публичном репозитории GitHub выключает расписание после 60 дней без коммитов.
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/keepalive.yml/enable"
