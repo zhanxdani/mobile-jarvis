@@ -518,6 +518,39 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
 .prog svg { width: 100%; height: auto; display: block; overflow: visible; }
 .prog svg text { font: 500 9.5px var(--mono); fill: var(--ink-2); }
 .prog .tip { font-size: 11px; color: var(--ink-2); min-height: 15px; font-variant-numeric: tabular-nums; }
+/* ===== Neon Glass 2.0 ===== */
+.ltitle { font-weight: 800; font-size: 32px; line-height: 1.1; letter-spacing: -.03em; }
+/* градиентная рамка у стекла: голубой → прозрачный → розовый */
+.glass:not(.toast) { position: relative; }
+.glass:not(.toast):not(details)::before {
+  content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--neon) 60%, transparent), var(--edge) 38%, var(--edge) 62%, color-mix(in srgb, var(--pulse) 50%, transparent));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite: exclude;
+}
+details.glass { border-color: color-mix(in srgb, var(--neon) 18%, var(--edge)); }
+.icon-btn { background: linear-gradient(160deg, var(--sheen-a), var(--tint)); box-shadow: inset 0 1px 0 var(--shine); }
+/* плитки: насыщеннее и с цветным свечением */
+.tile {
+  background: linear-gradient(150deg, color-mix(in srgb, var(--k) 28%, transparent), color-mix(in srgb, var(--k) 5%, transparent) 75%), var(--tint);
+  border-color: color-mix(in srgb, var(--k) 42%, var(--edge));
+  box-shadow: inset 0 1px 0 var(--shine), 0 14px 34px -18px var(--k);
+}
+.tile .tbig { font-weight: 700; font-size: 26px; }
+/* XP-полоса: градиент с бегущим бликом */
+.xpbar .lv { font-weight: 700; }
+.xpbar .bar { height: 7px; }
+.xpbar .bar i { position: relative; overflow: hidden; background: linear-gradient(90deg, var(--neon), var(--volt), var(--pulse));
+  box-shadow: 0 0 calc(12px * var(--glow)) var(--volt); }
+.xpbar .bar i::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,.55), transparent);
+  transform: translateX(-100%); animation: shimmer 3.2s ease-in-out infinite; }
+@keyframes shimmer { 60%, 100% { transform: translateX(100%); } }
+/* кнопка ＋ и активная вкладка */
+.tabbar .plus i { box-shadow: 0 0 calc(28px * var(--glow)) -2px var(--neon), inset 0 1px 0 rgba(255,255,255,.5); }
+.tabbar button.on::after { content: ""; position: absolute; bottom: -3px; width: 4px; height: 4px; border-radius: 50%; background: var(--neon); box-shadow: 0 0 calc(8px * var(--glow)) var(--neon); }
+.tabbar button.plus.on::after { display: none; }
+@media (prefers-reduced-motion: reduce) { .xpbar .bar i::after { animation: none; display: none; } }
+
 @media (prefers-reduced-motion: reduce) {
   .orb, .led, .item.fresh, .nudge, .icon-btn.spin span, .sheet-panel { animation: none; }
   .toast, .send, .chip, .switch, .switch::after { transition: none; }
