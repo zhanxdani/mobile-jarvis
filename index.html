@@ -123,8 +123,31 @@ button { font-family: var(--mono); }
 }
 .icon-btn.spin span { display: inline-block; animation: spin .8s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.sub { margin: 0; font-size: 12px; color: var(--mute); }
+.sub { margin: 0; font-size: 12px; color: var(--mute); min-width: 0; }
 .sub b { color: var(--ink-2); font-weight: 500; }
+.sub .work { color: var(--pulse); }
+.sub .on { color: var(--ok); }
+.runrow { align-items: center; }
+.run {
+  flex: none; font: 700 12px var(--mono); letter-spacing: .03em; color: var(--ok);
+  background: color-mix(in srgb, var(--ok) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ok) 50%, transparent); border-radius: 12px;
+  padding: 9px 13px; cursor: pointer; white-space: nowrap;
+  text-shadow: 0 0 calc(8px * var(--glow)) color-mix(in srgb, var(--ok) 60%, transparent);
+  box-shadow: 0 0 calc(18px * var(--glow)) -6px var(--ok);
+}
+.run:active { transform: scale(.97); }
+.run:disabled { color: var(--mute); border-color: var(--edge); background: var(--tint); text-shadow: none; box-shadow: none; cursor: default; }
+
+/* Вопросы от Claude */
+.qcard { padding: 14px; display: flex; flex-direction: column; gap: 10px; border-color: color-mix(in srgb, var(--warn) 45%, var(--edge)); }
+.qcard .qh { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--warn); }
+.qcard .qt { margin: 0; font-size: 12px; color: var(--mute); overflow-wrap: anywhere; }
+.qcard .qq { margin: 0; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; white-space: pre-wrap; }
+.qcard textarea { resize: none; min-height: 2.6em; font: 400 16px/1.45 var(--mono); }
+.qcard .qa { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.qcard .qa .send { margin-left: auto; padding: 9px 14px; --k: var(--warn); }
+#approveNew { --k: var(--ok); }
 
 /* Поле записи */
 .compose { padding: 14px; display: flex; flex-direction: column; gap: 12px; --k: var(--neon); transition: border-color .3s; }
@@ -236,6 +259,10 @@ button { font-family: var(--mono); }
 .st.wait { color: var(--neon); border-color: color-mix(in srgb, var(--neon) 45%, transparent); }
 .st.done { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 45%, transparent); }
 .st.doing { color: var(--pulse); border-color: color-mix(in srgb, var(--pulse) 45%, transparent); }
+/* ✓ на задаче: «Mac сделает без меня» */
+button.st { font-family: var(--mono); background: none; cursor: pointer; padding: 6px 10px; margin-top: -3px; }
+button.st.ask { border-style: dashed; }
+button.st.yes { color: var(--ok); border-color: color-mix(in srgb, var(--ok) 55%, transparent); background: color-mix(in srgb, var(--ok) 10%, transparent); }
 .more { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--edge); font-size: 12.5px; line-height: 1.65; color: var(--ink-2); white-space: pre-wrap; overflow-wrap: anywhere; }
 .more .label { display: block; color: var(--mute); font-size: 11px; margin-bottom: 6px; white-space: normal; }
 .report { margin: 10px 0 0 19px; font-size: 12.5px; line-height: 1.6; color: var(--ink-2); white-space: pre-wrap; overflow-wrap: anywhere; }
@@ -323,8 +350,13 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
         <button type="button" class="icon-btn" id="openSettings" aria-label="Настройки"><span>⚙</span></button>
       </div>
     </div>
-    <p class="sub" id="syncLine">загружаю…</p>
+    <div class="row runrow">
+      <p class="sub" id="syncLine">загружаю…</p>
+      <button type="button" class="run" id="run" hidden>▶ за работу</button>
+    </div>
   </header>
+
+  <section class="stack" id="questions" hidden aria-label="Вопросы от Claude"></section>
 
   <section class="glass gate" id="gate" hidden>
     <h1>Открой через Telegram</h1>
@@ -346,6 +378,9 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
       </div>
       <div class="chips" id="templates" aria-label="Быстрый старт"></div>
       <div class="chips" id="projects" aria-label="Проект"></div>
+      <div class="chips" id="approveRow" hidden>
+        <button type="button" class="chip" id="approveNew" aria-pressed="false">✓ Mac сделает без меня</button>
+      </div>
       <div class="picked" id="picked" hidden></div>
       <div class="actions">
         <div class="left">
@@ -454,7 +489,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
 
   var KIND = {
     idea: { label: 'идея', color: 'var(--neon)', hint: 'Попадёт в папку «Идеи» и на доску идей.' },
-    task: { label: 'задача', color: 'var(--pulse)', hint: 'Claude выполнит после «синхронизируй» и напишет, что сделал.' },
+    task: { label: 'задача', color: 'var(--pulse)', hint: 'С ✓ Mac выполнит сам по кнопке «▶ за работу». Без ✓ — когда скажешь «синхронизируй» за Mac.' },
     note: { label: 'заметка', color: 'var(--volt)', hint: 'Сохранится в Jarvis, Claude сам решит, в какую папку.' }
   };
   var ARCH_STATUS = { synced: ['забрано', ''], dismissed: ['отменено', ''], done: ['готово', 'done'] };
@@ -474,8 +509,9 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   var $ = function (id) { return document.getElementById(id); };
   var compose = $('compose'), note = $('note'), fileInput = $('file'), dueInput = $('due');
   var kind = 'idea', file = null, due = null, selTags = {}, freshId = null, busy = false;
+  var approveNew = false, answerDrafts = {}, pollTimer = null;
   var ideaFilter = 'all', ideaQuery = '';
-  var data = { waiting: [], reports: [], archive: [], ideas: [], last_sync: null, settings: null };
+  var data = { waiting: [], reports: [], archive: [], ideas: [], questions: [], last_sync: null, mac: null, run_request: null, settings: null };
   var settings = { tz: 'Asia/Bishkek', cities: [], digest_on: true, digest_hour: 9, projects: [], templates: [] };
   var loaded = false;
 
@@ -568,7 +604,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     t.classList.toggle('bad', !!bad);
     t.classList.add('on');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () { t.classList.remove('on'); }, bad ? 3600 : 2200);
+    toastTimer = setTimeout(function () { t.classList.remove('on'); }, Math.max(bad ? 3600 : 2200, msg.length * 60));
   }
   function haptic(type) { try { tg.HapticFeedback.notificationOccurred(type); } catch (e) {} }
   function tap() { try { tg.HapticFeedback.selectionChanged(); } catch (e) {} }
@@ -613,8 +649,28 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
 
   function waitingItem(it) {
     var d = el('details', 'item glass');
+    d.dataset.id = it.id;
     if (it.id === freshId) d.classList.add('fresh');
-    d.appendChild(headRow('summary', it, (KIND[it.kind] || KIND.note).color, when(it.created_at), 'ждёт', 'wait', true));
+    var head = headRow('summary', it, (KIND[it.kind] || KIND.note).color, when(it.created_at), 'ждёт', 'wait', true);
+    if (it.kind === 'task') {
+      // Вместо «ждёт» — переключатель ✓: Mac сделает эту задачу без меня.
+      var pill = head.lastChild;
+      var tgl = btn('st ' + (it.approved ? 'yes' : 'ask'), it.approved ? '✓ сделает' : 'отметить ✓');
+      tgl.setAttribute('aria-pressed', it.approved ? 'true' : 'false');
+      tgl.setAttribute('aria-label', it.approved ? 'Mac сделает без тебя. Нажми, чтобы снять ✓' : 'Разрешить Mac сделать эту задачу без тебя');
+      tgl.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        var next = !it.approved;
+        tgl.disabled = true;
+        call('/approve', { id: it.id, approved: next }).then(function () {
+          it.approved = next; tap();
+          toast(next ? '✓ Mac сделает это без тебя' : 'без ✓: подождёт, пока ты за Mac');
+          render();
+        }).catch(function (err) { tgl.disabled = false; toast(err.message, true); });
+      });
+      head.replaceChild(tgl, pill);
+    }
+    d.appendChild(head);
     var more = el('div', 'more', it.body || '');
     var del = btn('del', 'удалить');
     var armTimer;
@@ -677,9 +733,105 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
 
   function fill(listId, items, make, emptyText) {
     var box = $(listId);
+    // список обновляется сам, пока Mac работает: раскрытые карточки остаются раскрытыми
+    var open = {};
+    box.querySelectorAll('details[open][data-id]').forEach(function (x) { open[x.dataset.id] = true; });
     box.textContent = '';
     if (!items.length) { box.appendChild(el('div', 'empty glass', loaded ? emptyText : 'загружаю…')); return; }
-    items.forEach(function (it) { box.appendChild(make(it)); });
+    items.forEach(function (it) {
+      var node = make(it);
+      if (open[it.id] && node.tagName === 'DETAILS') node.open = true;
+      box.appendChild(node);
+    });
+  }
+
+  // ---------- Mac: статус, кнопка «▶ за работу», вопросы ----------
+  function macOnline() { return !!(data.mac && data.mac.online); }
+  function macWorking() { return macOnline() && data.mac.state === 'working'; }
+
+  function renderMac() {
+    var line = $('syncLine'), run = $('run');
+    line.textContent = '';
+    if (!loaded) { line.textContent = 'загружаю…'; run.hidden = true; return; }
+    run.hidden = false;
+    var seen = data.mac && data.mac.seen_at;
+    if (macWorking()) {
+      line.appendChild(el('span', 'work', '● Mac работает'));
+      if (data.mac.note) line.appendChild(document.createTextNode(': ' + data.mac.note));
+    } else if (data.run_request) {
+      line.appendChild(el('span', 'work', '⏳ '));
+      line.appendChild(document.createTextNode(macOnline() ? 'Mac сейчас начнёт' : 'ждёт Mac: он не на связи'));
+    } else {
+      if (macOnline()) line.appendChild(el('span', 'on', '● Mac на связи'));
+      else line.appendChild(document.createTextNode(seen ? 'Mac не на связи (был ' + when(seen) + ')' : 'Mac пока не на связи'));
+      line.appendChild(document.createTextNode(' · забирал: '));
+      line.appendChild(el('b', '', data.last_sync ? when(data.last_sync) : 'ещё нет'));
+    }
+    var busyMac = macWorking() || !!data.run_request;
+    run.disabled = busyMac;
+    run.textContent = macWorking() ? 'работает…' : data.run_request ? 'ждёт Mac…' : '▶ за работу';
+  }
+
+  function runMac() {
+    var run = $('run');
+    run.disabled = true;
+    call('/run').then(function (j) {
+      data.run_request = new Date().toISOString();
+      data.mac = j.mac;
+      haptic('success');
+      if (j.mac && j.mac.online) toast('▶ Mac начнёт в течение минуты. Когда закончит, бот напишет.');
+      else toast('Mac не на связи. Начнёт, как появится: Mac не спит, Jarvis открыт, Пароли открывали после включения.', true);
+      renderMac(); schedule();
+    }).catch(function (e) { run.disabled = false; haptic('error'); toast(e.message, true); });
+  }
+
+  function questionCard(it) {
+    var c = el('div', 'qcard glass');
+    c.dataset.id = it.id;
+    c.appendChild(el('span', 'qh', '? Claude спрашивает'));
+    c.appendChild(el('p', 'qt', (KIND[it.kind] ? KIND[it.kind].label : 'запись') + ': ' + it.title));
+    c.appendChild(el('p', 'qq', it.question));
+    var ta = el('textarea', 'inp');
+    ta.rows = 2; ta.placeholder = 'твой ответ'; ta.setAttribute('aria-label', 'Ответ на вопрос');
+    ta.value = answerDrafts[it.id] || '';
+    ta.addEventListener('input', function () { answerDrafts[it.id] = ta.value; });
+    c.appendChild(ta);
+    var row = el('div', 'qa');
+    function answer(text) {
+      text = (text || '').trim();
+      if (!text) { ta.focus(); toast('напиши ответ'); return; }
+      row.querySelectorAll('button').forEach(function (b) { b.disabled = true; });
+      call('/answer', { id: it.id, answer: text }).then(function (j) {
+        delete answerDrafts[it.id];
+        data.mac = j.mac;
+        haptic('success');
+        toast(j.mac && j.mac.online ? 'ответ у Mac, он продолжит' : 'ответ сохранён, Mac продолжит, когда появится');
+        refresh();
+      }).catch(function (e) { row.querySelectorAll('button').forEach(function (b) { b.disabled = false; }); toast(e.message, true); });
+    }
+    row.appendChild(btn('chip', 'да', function () { answer('да'); }));
+    row.appendChild(btn('chip', 'нет', function () { answer('нет'); }));
+    row.appendChild(btn('send', 'ответить', function () { answer(ta.value); }));
+    c.appendChild(row);
+    return c;
+  }
+
+  function renderQuestions() {
+    var box = $('questions');
+    // не перерисовываем, пока ты печатаешь ответ
+    if (box.contains(document.activeElement)) return;
+    box.textContent = '';
+    var qs = data.questions || [];
+    box.hidden = !qs.length;
+    qs.forEach(function (q) { box.appendChild(questionCard(q)); });
+  }
+
+  // пока Mac работает или ждёт запуска — обновляемся часто, иначе редко
+  function schedule() {
+    clearTimeout(pollTimer);
+    if (document.hidden) return;
+    var fast = macWorking() || !!data.run_request;
+    pollTimer = setTimeout(function () { refresh(true); }, fast ? 6000 : 60000);
   }
 
   function renderIdeas() {
@@ -709,30 +861,29 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
   }
 
   function render() {
-    fill('lWait', data.waiting, waitingItem, 'Пусто. Всё, что отправишь, ждёт здесь, пока на Mac не скажешь «синхронизируй».');
+    fill('lWait', data.waiting, waitingItem, 'Пусто. Отправленное ждёт здесь, пока не нажмёшь «▶ за работу» или не скажешь «синхронизируй» за Mac.');
     fill('lRep', data.reports, reportItem, 'Здесь появятся ответы Claude по выполненным задачам.');
     fill('lArch', data.archive, archiveItem, 'Здесь будет то, что Mac уже забрал.');
     renderIdeas();
+    renderQuestions();
     freshId = null;
     $('nWait').textContent = data.waiting.length || '';
     $('nRep').textContent = data.reports.length || '';
-    var line = $('syncLine');
-    line.textContent = '';
-    if (!loaded) { line.textContent = 'загружаю…'; return; }
-    if (data.last_sync) {
-      line.appendChild(document.createTextNode('Mac забирал: '));
-      line.appendChild(el('b', '', when(data.last_sync)));
-    } else {
-      line.textContent = 'Mac ещё ничего не забирал';
-    }
+    renderMac();
   }
 
   // ---------- поле записи ----------
+  function renderApprove() {
+    $('approveRow').hidden = kind !== 'task';
+    $('approveNew').setAttribute('aria-pressed', approveNew ? 'true' : 'false');
+  }
+
   function setKind(k) {
     kind = KIND[k] ? k : 'idea';
     compose.dataset.kind = kind;
     store('mj-kind', kind);
     $('kindHint').textContent = KIND[kind].hint;
+    renderApprove();
     document.querySelectorAll('.seg [data-kind]').forEach(function (x) {
       x.setAttribute('aria-checked', x.dataset.kind === kind ? 'true' : 'false');
     });
@@ -795,21 +946,24 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
 
   function renderComposeChips() { renderTemplates(); renderProjects(); renderPicked(); }
 
-  function refresh() {
+  function refresh(quiet) {
     var b = $('refresh');
-    b.classList.add('spin');
+    if (!quiet) b.classList.add('spin');
+    var wasWorking = macWorking() || !!data.run_request;
     return call('/list').then(function (j) {
       data = j;
       data.ideas = j.ideas || [];
+      data.questions = j.questions || [];
       loaded = true;
-      if (j.settings) { settings = j.settings; renderComposeChips(); }
+      if (j.settings && $('sheet').hidden) { settings = j.settings; renderComposeChips(); }
       $('led').classList.remove('off');
       render();
+      if (wasWorking && !macWorking() && !data.run_request) { haptic('success'); toast('Mac закончил ✓'); }
     }).catch(function (e) {
       $('led').classList.add('off');
       if (!loaded) $('syncLine').textContent = 'нет связи с облаком, нажми ↻';
-      toast('нет связи с облаком: ' + e.message, true);
-    }).then(function () { b.classList.remove('spin'); });
+      if (!quiet) toast('нет связи с облаком: ' + e.message, true);
+    }).then(function () { b.classList.remove('spin'); schedule(); });
   }
 
   function selectTab(name) {
@@ -854,7 +1008,8 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     (f ? uploadFile(f) : Promise.resolve(null)).then(function (meta) {
       return call('/create', {
         kind: kind, text: text, files: meta ? [meta] : [],
-        tags: Object.keys(selTags), due_at: due ? due.toISOString() : null
+        tags: Object.keys(selTags), due_at: due ? due.toISOString() : null,
+        approved: kind === 'task' && approveNew
       });
     }).then(function (j) {
       note.value = ''; grow(); store('mj-draft', null);
@@ -864,7 +1019,7 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
       renderComposeChips();
       freshId = j.item && j.item.id;
       haptic('success');
-      toast('отправлено ✓ ждёт синхронизации');
+      toast(j.item && j.item.approved ? 'отправлено ✓ Mac сделает по кнопке «▶ за работу»' : 'отправлено, ждёт');
       selectTab('wait');
       return refresh();
     }).catch(function (e) {
@@ -1131,13 +1286,23 @@ select.inp { appearance: none; -webkit-appearance: none; width: auto; padding-ri
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); send(); }
   });
   $('send').addEventListener('click', send);
-  $('refresh').addEventListener('click', refresh);
+  $('refresh').addEventListener('click', function () { refresh(); });
+  $('run').addEventListener('click', runMac);
+  $('approveNew').addEventListener('click', function () {
+    approveNew = !approveNew;
+    store('mj-approve', approveNew ? '1' : null);
+    tap(); renderApprove();
+  });
   compose.addEventListener('animationend', function () { compose.classList.remove('nudge'); });
-  document.addEventListener('visibilitychange', function () { if (!document.hidden && $('sheet').hidden) refresh(); });
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) { clearTimeout(pollTimer); return; }
+    if ($('sheet').hidden) refresh(); else schedule();
+  });
 
   // черновик, тип записи и вкладка переживают закрытие приложения
   var draftText = load('mj-draft');
   if (draftText) { note.value = draftText; grow(); }
+  approveNew = load('mj-approve') === '1';
   setKind(load('mj-kind') || 'idea');
   var lastTab = load('mj-tab');
   if (lastTab && $('p-' + lastTab)) selectTab(lastTab);
